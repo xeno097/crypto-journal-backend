@@ -32,4 +32,4 @@ export class UserEntity extends Document implements IUserEntity, IBaseEntity {
   }
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserEntity);
+export const UserEntitySchema = SchemaFactory.createForClass(UserEntity);
