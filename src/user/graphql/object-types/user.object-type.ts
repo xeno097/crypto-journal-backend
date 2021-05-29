@@ -9,7 +9,7 @@ export class UserType implements IUserType {
   @Field()
   userName: string;
 
-  @Field()
+  @Field({ nullable: true })
   profilePicture?: string;
 
   @Field()
