@@ -5,9 +5,19 @@ import { UpdateUserInput } from './graphql/input-types/update-user.input-type';
 import { UserResult } from './graphql/union-types/user-result.union-type';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
+import { getError } from 'src/shared/graphql/errors/utils/get-graphql-error.util';
 
 @Resolver()
 export class UserResolver {
+  // TODO: Error handling for user entity
+
+  // TODO: create tests for user module
+
+  // TODO: add validations to input types
+
+  // TODO: fix repository when filtering by id
+
+  // TODO: create a formatter for mongoose validation errors
   constructor(private readonly userService: UserService) {}
 
   @Query(() => UserResult)
@@ -15,19 +25,31 @@ export class UserResolver {
     @Args(FieldName.ID) id: string,
   ): Promise<typeof UserResult> {
     try {
-      const res = await this.userService.getUserById({ id });
+      const [err, res] = await this.userService.getUserById({ id });
+
+      if (err) {
+        return getError(err);
+      }
 
       return res;
-    } catch (error) {}
+    } catch (error) {
+      return getError(error);
+    }
   }
 
   @Query(() => [UserResult])
   public async getUsers(): Promise<Array<typeof UserResult>> {
     try {
-      const result = await this.userService.getUsers();
+      const [err, res] = await this.userService.getUsers();
 
-      return result;
-    } catch (error) {}
+      if (err) {
+        return [getError(err)];
+      }
+
+      return res;
+    } catch (error) {
+      return [getError(error)];
+    }
   }
 
   @Mutation(() => UserResult)
@@ -35,10 +57,16 @@ export class UserResolver {
     @Args(FieldName.INPUT) createUserInput: CreateUserInput,
   ): Promise<typeof UserResult> {
     try {
-      const result = await this.userService.createUser(createUserInput);
+      const [err, res] = await this.userService.createUser(createUserInput);
 
-      return result;
-    } catch (error) {}
+      if (err) {
+        return getError(err);
+      }
+
+      return res;
+    } catch (error) {
+      return getError(error);
+    }
   }
 
   @Mutation(() => UserResult)
@@ -53,10 +81,16 @@ export class UserResolver {
         updateEntityPayload: data,
       };
 
-      const result = await this.userService.updateUser(updateUserDto);
+      const [err, res] = await this.userService.updateUser(updateUserDto);
 
-      return result;
-    } catch (error) {}
+      if (err) {
+        return getError(err);
+      }
+
+      return res;
+    } catch (error) {
+      return getError(error);
+    }
   }
 
   @Mutation(() => UserResult)
@@ -64,9 +98,15 @@ export class UserResolver {
     @Args(FieldName.ID) id: string,
   ): Promise<typeof UserResult> {
     try {
-      const res = await this.userService.deleteUserById({ id });
+      const [err, res] = await this.userService.deleteUserById({ id });
+
+      if (err) {
+        return getError(err);
+      }
 
       return res;
-    } catch (error) {}
+    } catch (error) {
+      return getError(error);
+    }
   }
 }

@@ -4,61 +4,65 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserRepository } from './user.repository';
-
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async getUserById(getUserByIdDto: GetEntityByIdDto): Promise<UserDto> {
+  public async getUserById(
+    getUserByIdDto: GetEntityByIdDto,
+  ): Promise<[Error, UserDto]> {
     try {
       const res = await this.userRepository.getOneEntity(getUserByIdDto);
 
       return res;
     } catch (error) {
-      console.log(error);
-      throw error;
+      return [error, null];
     }
   }
 
-  public async getUsers(): Promise<UserDto[]> {
+  public async getUsers(): Promise<[Error, UserDto[]]> {
     try {
       const res = await this.userRepository.getEntities();
 
       return res;
     } catch (error) {
-      throw error;
+      return [error, null];
     }
   }
 
-  public async createUser(createUserDto: CreateUserDto): Promise<UserDto> {
+  public async createUser(
+    createUserDto: CreateUserDto,
+  ): Promise<[Error, UserDto]> {
     try {
       const res = await this.userRepository.createEntity(createUserDto);
 
       return res;
     } catch (error) {
-      throw error;
+      return [error, null];
     }
   }
 
-  public async updateUser(updateUserDto: UpdateUserDto): Promise<UserDto> {
+  public async updateUser(
+    updateUserDto: UpdateUserDto,
+  ): Promise<[Error, UserDto]> {
     try {
       const res = await this.userRepository.updateEntity(updateUserDto);
 
       return res;
     } catch (error) {
-      throw error;
+      return [error, null];
     }
   }
 
   public async deleteUserById(
     getUserByIdDto: GetEntityByIdDto,
-  ): Promise<UserDto> {
+  ): Promise<[Error, UserDto]> {
     try {
       const res = await this.userRepository.deleteOneEntity(getUserByIdDto);
 
       return res;
     } catch (error) {
-      throw error;
+      return [error, null];
     }
   }
 }

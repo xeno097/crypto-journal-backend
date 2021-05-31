@@ -1,14 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
-import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
 import { UserDto } from '../dtos/user.dto';
 import { IUserEntity } from '../interfaces/entities/user-entity.interface';
 
 @Schema({
   timestamps: true,
 })
-export class UserEntity extends Document implements IUserEntity, IBaseEntity {
+export class UserEntity extends Document implements IUserEntity {
   @Prop({ required: true })
   userName: string;
 
@@ -18,16 +17,16 @@ export class UserEntity extends Document implements IUserEntity, IBaseEntity {
   @Prop({ required: true })
   email: string;
 
-  @Prop({ default: UserRoles.USER, enum: Object.keys(UserRoles) })
+  @Prop({ default: UserRoles.USER, enum: UserRoles })
   role: UserRoles;
 
-  toDto(): UserDto {
+  static toDto(input: UserEntity): UserDto {
     return {
-      email: this.email,
-      role: this.role,
-      id: this.id,
-      profilePicture: this.profilePicture,
-      userName: this.userName,
+      email: input.email,
+      role: input.role,
+      id: input.id,
+      profilePicture: input.profilePicture,
+      userName: input.userName,
     };
   }
 }
