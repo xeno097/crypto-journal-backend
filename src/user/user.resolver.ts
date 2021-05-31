@@ -1,11 +1,11 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { FieldName } from 'src/shared/graphql/enums/input-fields.enum';
+import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { CreateUserInput } from './graphql/input-types/create-user.input-type';
 import { UpdateUserInput } from './graphql/input-types/update-user.input-type';
 import { UserResult } from './graphql/union-types/user-result.union-type';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
-import { getError } from 'src/shared/graphql/errors/utils/get-graphql-error.util';
+import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
 
 @Resolver()
 export class UserResolver {
