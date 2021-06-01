@@ -15,8 +15,6 @@ export class UserResolver {
 
   // TODO: add validations to input types
 
-  // TODO: fix repository when filtering by id
-
   // TODO: create a formatter for mongoose validation errors
   constructor(private readonly userService: UserService) {}
 
