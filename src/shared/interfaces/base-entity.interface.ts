@@ -1,3 +1,3 @@
 export interface IBaseEntity {
-  toDto(): any;
+  id: string;
 }

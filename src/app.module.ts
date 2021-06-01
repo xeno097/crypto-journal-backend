@@ -9,12 +9,12 @@ import { UserModule } from './user/user.module';
     ConfigModule.forRoot({ envFilePath: './config/.env' }),
     MongooseModule.forRoot(process.env.DB_URI),
     UserModule,
-    // GraphQLModule.forRoot({
-    //   autoSchemaFile: true,
-    //   context: ({ req, res }) => {
-    //     return req;
-    //   },
-    // }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+      context: ({ req, res }) => {
+        return req;
+      },
+    }),
   ],
   controllers: [],
   providers: [],
