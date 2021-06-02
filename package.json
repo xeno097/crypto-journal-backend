@@ -27,10 +27,12 @@
     "@nestjs/graphql": "^7.10.6",
     "@nestjs/mongoose": "^7.2.4",
     "@nestjs/platform-express": "^7.0.0",
+    "@types/nodemailer": "^6.4.2",
     "apollo-server-express": "^2.25.0",
     "graphql": "^15.5.0",
     "graphql-tools": "^7.0.5",
     "mongoose": "^5.12.12",
+    "nodemailer": "^6.6.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4"
