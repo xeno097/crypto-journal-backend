@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
 import { EmailError } from 'src/errors/email.error';
+import { SendEmailOptionsDto } from './dtos/send-email-options.dto';
 
 @Injectable()
 export class EmailService {
@@ -17,13 +18,9 @@ export class EmailService {
     });
   }
 
-  public async sendEmail(sendEmailOptions: {
-    emailTo: string;
-    emailBody: string;
-    subject: string;
-  }) {
+  public async sendEmail(sendEmailOptionsDto: SendEmailOptionsDto) {
     try {
-      const { emailTo, subject, emailBody } = sendEmailOptions;
+      const { emailTo, subject, emailBody } = sendEmailOptionsDto;
 
       await this._emailTransporter.sendMail({
         from: process.env.EMAIL_FROM,
