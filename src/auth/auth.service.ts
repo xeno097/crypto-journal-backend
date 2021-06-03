@@ -35,6 +35,8 @@ export class AuthService {
       // if the user does not exist create it
       if (!user) {
         [err, user] = await this.userRepository.createEntity(createUserDto);
+
+        // TODO: send email to new users
       }
 
       if (err) {
