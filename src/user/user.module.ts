@@ -15,5 +15,6 @@ import { UserEntity, UserEntitySchema } from './database/user.entity';
     ]),
   ],
   providers: [UserService, UserResolver, UserRepository],
+  exports: [UserRepository],
 })
 export class UserModule {}

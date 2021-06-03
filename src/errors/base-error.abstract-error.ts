@@ -10,6 +10,6 @@ export abstract class BaseError extends Error implements IBaseError {
   constructor() {
     super();
 
-    Object.setPrototypeOf(this, BaseError);
+    Object.setPrototypeOf(this, BaseError.prototype);
   }
 }
