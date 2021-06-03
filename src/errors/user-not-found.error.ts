@@ -8,6 +8,6 @@ export class UserNotFoundError extends BaseError {
   constructor() {
     super();
 
-    Object.setPrototypeOf(this, UserNotFoundError);
+    Object.setPrototypeOf(this, UserNotFoundError.prototype);
   }
 }

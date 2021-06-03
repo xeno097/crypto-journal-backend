@@ -4,6 +4,6 @@ export class EmailError extends BaseError {
   constructor() {
     super();
 
-    Object.setPrototypeOf(this, EmailError);
+    Object.setPrototypeOf(this, EmailError.prototype);
   }
 }
