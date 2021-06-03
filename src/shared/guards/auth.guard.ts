@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { InvalidJwtFormatError } from 'src/errors/invalid-jwt-format.error';
 import { ICustomGqlContext } from '../interfaces/custom-gql-context.interface';
+import { JwtExpiredError } from 'src/errors/jwt-expired.error';
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
@@ -22,9 +23,12 @@ export class GqlAuthGuard implements CanActivate {
 
       return true;
     } catch (error) {
-      console.log(error);
       if (error.message === 'jwt malformed') {
         throw new InvalidJwtFormatError();
+      }
+
+      if (error.message === 'jwt expired') {
+        throw new JwtExpiredError();
       }
 
       return false;
