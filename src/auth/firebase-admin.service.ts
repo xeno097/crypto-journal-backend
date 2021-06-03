@@ -35,7 +35,10 @@ export class FirebaseAdminService {
 
       return ret;
     } catch (error) {
-      if (error.code === 'auth/argument-error') {
+      if (
+        error.code === 'auth/argument-error' ||
+        error.code === 'auth/id-token-expired'
+      ) {
         throw new InvalidTokenError();
       }
 
