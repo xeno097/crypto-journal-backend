@@ -25,8 +25,6 @@ export class AuthService {
       const createUserDto = await this.firebaseAdminService.verifyToken(token);
       const { email } = createUserDto;
 
-      // throw an error if the token is invalid
-
       // search the user by email in the db
       let [err, user] = await this.userRepository.getOneEntity({ email });
 
