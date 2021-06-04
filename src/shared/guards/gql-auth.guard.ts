@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { UserRoles } from '../enums/user-roles.enum';
 import { AUTHORIZED_ROLES_KEY } from '../decorators/authorized-roles.decorator';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
+import { UnauthorizedUserError } from 'src/errors/unauthorized-user.error';
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
@@ -28,18 +29,10 @@ export class GqlAuthGuard implements CanActivate {
 
       customGqlContext.jwtPayload = jwtPayload;
 
-      const authorizedRoles = this.reflector.getAllAndOverride<UserRoles[]>(
-        AUTHORIZED_ROLES_KEY,
-        [context.getHandler(), context.getClass()],
-      );
+      const authorized = this.verifyUserRole(jwtPayload, context);
 
-      const { role } = jwtPayload;
-
-      if (authorizedRoles) {
-        const [authorizedRole] = authorizedRoles.filter(authorizedRole => {
-          return role === authorizedRole;
-        });
-        return !!authorizedRole;
+      if (!authorized) {
+        throw new UnauthorizedUserError();
       }
 
       return true;
@@ -52,7 +45,29 @@ export class GqlAuthGuard implements CanActivate {
         throw new JwtExpiredError();
       }
 
-      return false;
+      throw new UnauthorizedUserError();
     }
+  }
+
+  private verifyUserRole(
+    jwtPayload: JwtPayloadDto,
+    context: ExecutionContext,
+  ): boolean {
+    const authorizedRoles = this.reflector.getAllAndOverride<UserRoles[]>(
+      AUTHORIZED_ROLES_KEY,
+      [context.getHandler(), context.getClass()],
+    );
+
+    if (!authorizedRoles) {
+      return true;
+    }
+
+    const { role } = jwtPayload;
+
+    const [authorizedRole] = authorizedRoles.filter(authorizedRole => {
+      return role === authorizedRole;
+    });
+
+    return !!authorizedRole;
   }
 }
