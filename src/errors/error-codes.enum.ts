@@ -7,6 +7,7 @@ export enum ErrorCode {
   INVALID_SIGN_IN_TOKEN = 'invalid-signin-token',
   INVALID_JWT_FORMAT = 'invalid-jwt-format',
   EXPIRED_JWT = 'expired-jwt',
+  UNAUTHORIZED_USER = 'unauthorized-user',
 }
 
 registerEnumType(ErrorCode, {
