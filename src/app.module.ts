@@ -1,21 +1,34 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
+import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-ctx.util';
+import { EnvKey } from './shared/enums/env-keys.enum';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: './config/.env' }),
-    MongooseModule.forRoot(process.env.DB_URI),
+    ConfigModule.forRoot({
+      cache: true,
+      isGlobal: true,
+      envFilePath: './config/.env',
+    }),
+    MongooseModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService): MongooseModuleOptions => {
+        const dbUri = configService.get(EnvKey.DB_URI);
+
+        return {
+          uri: dbUri,
+        };
+      },
+    }),
     UserModule,
     GraphQLModule.forRoot({
       autoSchemaFile: true,
-      context: ({ req, res }) => {
-        return req;
-      },
+      context: formatExpressGraphqlCtx,
     }),
     EmailModule,
     AuthModule,

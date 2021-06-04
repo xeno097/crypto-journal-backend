@@ -7,11 +7,16 @@ import { SignInDto } from './dtos/sign-in.dto';
 import { FirebaseAdminService } from './firebase-admin.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
+import { ConfigService } from '@nestjs/config';
+import { EnvKey } from 'src/shared/enums/env-keys.enum';
+import { UserDto } from 'src/user/dtos/user.dto';
+import { GetLoggedUserDto } from './dtos/get-logged-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     private readonly userRepository: UserRepository,
     private readonly firebaseAdminService: FirebaseAdminService,
   ) {}
@@ -50,8 +55,8 @@ export class AuthService {
 
       const accessToken = this.jwtService.sign(jwtPayloadDto);
       const refreshToken = this.jwtService.sign(jwtPayloadDto, {
-        secret: process.env.REFRESH_TOKEN_SECRET,
-        expiresIn: process.env.REFRESH_TOKEN_EXP,
+        secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
+        expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
       });
 
       // return access token, refresh token and user data
@@ -62,6 +67,31 @@ export class AuthService {
       };
 
       return [null, authPayloadDto];
+    } catch (error) {
+      return [error, null];
+    }
+  }
+
+  public async getLoggedUser(
+    jwtPayloadDto: JwtPayloadDto,
+  ): Promise<[Error, UserDto]> {
+    try {
+      const { id, email } = jwtPayloadDto;
+
+      const getLoggedUserDto: GetLoggedUserDto = {
+        id,
+        email,
+      };
+
+      const [err, res] = await this.userRepository.getOneEntity(
+        getLoggedUserDto,
+      );
+
+      if (err) {
+        return [err, null];
+      }
+
+      return [null, res];
     } catch (error) {
       return [error, null];
     }
