@@ -13,6 +13,6 @@ export class CreateUserInput implements ICreateUserInput {
   @Field()
   email: string;
 
-  @Field(() => UserRoles)
-  role: UserRoles;
+  @Field(() => UserRoles, { nullable: true, defaultValue: UserRoles.USER })
+  role?: UserRoles;
 }

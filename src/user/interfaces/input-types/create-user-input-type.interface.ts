@@ -4,5 +4,5 @@ export interface ICreateUserInput {
   userName: string;
   profilePicture?: string;
   email: string;
-  role: UserRoles;
+  role?: UserRoles;
 }
