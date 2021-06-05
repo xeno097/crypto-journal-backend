@@ -1,7 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { GqlExecutionContext } from '@nestjs/graphql';
-import { ICustomGqlContext } from '../interfaces/custom-gql-context.interface';
 import { JwtExpiredError } from 'src/errors/auth/jwt-expired.error';
 import { Reflector } from '@nestjs/core';
 import { UserRoles } from '../enums/user-roles.enum';
