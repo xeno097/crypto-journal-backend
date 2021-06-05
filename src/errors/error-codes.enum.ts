@@ -8,6 +8,7 @@ export enum ErrorCode {
   INVALID_JWT_FORMAT = 'invalid-jwt-format',
   EXPIRED_JWT = 'expired-jwt',
   UNAUTHORIZED_USER = 'unauthorized-user',
+  BLOCKED_USER = 'blocked-user',
 }
 
 registerEnumType(ErrorCode, {

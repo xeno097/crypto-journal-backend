@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserDto } from 'src/user/dtos/user.dto';
 import { GetLoggedUserDto } from './dtos/get-logged-user.dto';
+import { BlockedUserError } from 'src/errors/blocked-user.error';
 
 @Injectable()
 export class AuthService {
@@ -20,8 +21,6 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly firebaseAdminService: FirebaseAdminService,
   ) {}
-
-  // TODO: add blocked property to user
 
   // TODO: store refresh token in db
 
@@ -123,11 +122,16 @@ export class AuthService {
 
   private generateAuthPayload(user: UserDto): AuthPayloadDto {
     try {
-      const { id, email, role } = user;
-      const newJwtPayloadDto: JwtPayloadDto = { id, role, email };
+      const { id, email, role, blocked } = user;
 
-      const accessToken = this.jwtService.sign(newJwtPayloadDto);
-      const refreshToken = this.jwtService.sign(newJwtPayloadDto, {
+      if (blocked) {
+        throw new BlockedUserError();
+      }
+
+      const jwtPayloadDto: JwtPayloadDto = { id, role, email };
+
+      const accessToken = this.jwtService.sign(jwtPayloadDto);
+      const refreshToken = this.jwtService.sign(jwtPayloadDto, {
         secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
         expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
       });
