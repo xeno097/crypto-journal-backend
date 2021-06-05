@@ -9,6 +9,7 @@ import { AUTHORIZED_ROLES_KEY } from '../decorators/authorized-roles.decorator';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
 import { UnauthorizedUserError } from 'src/errors/auth/unauthorized-user.error';
 import { InvalidJwtFormatError } from 'src/errors/auth/invalid-jwt-format.error';
+import { getCustomGqlContext } from '../graphql/utils/get-custom-gql-context.util';
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
@@ -19,9 +20,7 @@ export class GqlAuthGuard implements CanActivate {
 
   canActivate(context: ExecutionContext): boolean {
     try {
-      const gqlContext = GqlExecutionContext.create(context);
-
-      const customGqlContext: ICustomGqlContext = gqlContext.getContext();
+      const customGqlContext = getCustomGqlContext(context);
 
       const { authorization } = customGqlContext;
 
