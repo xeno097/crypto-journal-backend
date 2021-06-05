@@ -6,8 +6,14 @@ import { UserResult } from './graphql/union-types/user-result.union-type';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
+import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
+import { UserRoles } from 'src/shared/enums/user-roles.enum';
 
 @Resolver()
+@AuthorizedRoles(UserRoles.ADMIN)
+@UseGuards(GqlAuthGuard)
 export class UserResolver {
   // TODO: Error handling for user entity
 
