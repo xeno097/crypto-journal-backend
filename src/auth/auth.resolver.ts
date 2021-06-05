@@ -7,6 +7,7 @@ import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { UserResult } from 'src/user/graphql/union-types/user-result.union-type';
 import { AuthService } from './auth.service';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
+import { UpdateLoggedUserInput } from './graphql/input-types/update-logged-user.input-type';
 import { AuthResult } from './graphql/union-types/auth-result.union-type';
 
 @Resolver()
@@ -54,6 +55,28 @@ export class AuthResolver {
   ): Promise<typeof AuthResult> {
     try {
       const [err, res] = await this.authService.refreshToken({ token });
+
+      if (err) {
+        return getError(err);
+      }
+
+      return res;
+    } catch (error) {
+      return getError(error);
+    }
+  }
+
+  @Mutation(() => UserResult)
+  @UseGuards(GqlAuthGuard)
+  public async updateLoggedUser(
+    @Args(FieldName.INPUT) updateLoggedUserInput: UpdateLoggedUserInput,
+    @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
+  ): Promise<typeof UserResult> {
+    try {
+      const [err, res] = await this.authService.updateLoggedUser(
+        updateLoggedUserInput,
+        jwtPayloadDto,
+      );
 
       if (err) {
         return getError(err);

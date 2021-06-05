@@ -12,6 +12,8 @@ import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserDto } from 'src/user/dtos/user.dto';
 import { GetLoggedUserDto } from './dtos/get-logged-user.dto';
 import { BlockedUserError } from 'src/errors/user/blocked-user.error';
+import { UpdateUserPayloadDto } from 'src/user/dtos/update-user.payload';
+import { UpdateUserDto } from 'src/user/dtos/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -146,6 +148,26 @@ export class AuthService {
       return authPayloadDto;
     } catch (error) {
       throw error;
+    }
+  }
+
+  public async updateLoggedUser(
+    updateUserPayloadDto: UpdateUserPayloadDto,
+    jwtPayloadDto: JwtPayloadDto,
+  ): Promise<[Error, UserDto]> {
+    try {
+      const { id } = jwtPayloadDto;
+
+      const updateUserDto: UpdateUserDto = {
+        getOneEntityDto: { id },
+        updateEntityPayload: updateUserPayloadDto,
+      };
+
+      const res = this.userRepository.updateEntity(updateUserDto);
+
+      return res;
+    } catch (error) {
+      return [error, null];
     }
   }
 }
