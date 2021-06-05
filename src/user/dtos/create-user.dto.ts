@@ -5,5 +5,5 @@ export class CreateUserDto implements ICreateUserDto {
   userName: string;
   profilePicture?: string;
   email: string;
-  role: UserRoles;
+  role?: UserRoles;
 }

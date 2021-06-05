@@ -1,4 +1,4 @@
-import { BaseError } from './base-error.abstract-error';
+import { BaseError } from '../base-error.abstract-error';
 
 export class EmailError extends BaseError {
   constructor() {

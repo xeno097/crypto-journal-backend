@@ -1,5 +1,5 @@
-import { ErrorCode } from './error-codes.enum';
-import { BaseError } from './base-error.abstract-error';
+import { BaseError } from '../base-error.abstract-error';
+import { ErrorCode } from '../error-codes.enum';
 
 export class UserNotFoundError extends BaseError {
   code = ErrorCode.USER_NOT_FOUND;

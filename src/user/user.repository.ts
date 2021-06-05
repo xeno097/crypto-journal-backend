@@ -5,7 +5,7 @@ import { UserEntity } from './database/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { UserNotFoundError } from 'src/errors/user-not-found.error';
+import { UserNotFoundError } from 'src/errors/user/user-not-found.error';
 
 @Injectable()
 export class UserRepository {

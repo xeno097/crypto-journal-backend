@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as admin from 'firebase-admin';
-import { InvalidTokenError } from 'src/errors/invalid-login-token.error';
+import { InvalidTokenError } from 'src/errors/auth/invalid-login-token.error';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
 import { CreateUserDto } from '../user/dtos/create-user.dto';

@@ -4,5 +4,5 @@ export interface ICreateUserDto {
   userName: string;
   profilePicture?: string;
   email: string;
-  role: UserRoles;
+  role?: UserRoles;
 }

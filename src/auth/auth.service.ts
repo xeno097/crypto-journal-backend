@@ -11,7 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserDto } from 'src/user/dtos/user.dto';
 import { GetLoggedUserDto } from './dtos/get-logged-user.dto';
-import { BlockedUserError } from 'src/errors/blocked-user.error';
+import { BlockedUserError } from 'src/errors/user/blocked-user.error';
 
 @Injectable()
 export class AuthService {

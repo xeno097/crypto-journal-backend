@@ -1,5 +1,5 @@
-import { BaseError } from './base-error.abstract-error';
-import { ErrorCode } from './error-codes.enum';
+import { BaseError } from '../base-error.abstract-error';
+import { ErrorCode } from '../error-codes.enum';
 
 export class BlockedUserError extends BaseError {
   code = ErrorCode.BLOCKED_USER;

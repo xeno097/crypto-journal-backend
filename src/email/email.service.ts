@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
 import { Transporter } from 'nodemailer';
-import { EmailError } from 'src/errors/email.error';
+import { EmailError } from 'src/errors/email/email.error';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { SendEmailOptionsDto } from './dtos/send-email-options.dto';
 
