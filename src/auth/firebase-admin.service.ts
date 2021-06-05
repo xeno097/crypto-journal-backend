@@ -5,16 +5,25 @@ import { InvalidTokenError } from 'src/errors/auth/invalid-login-token.error';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
 import { CreateUserDto } from '../user/dtos/create-user.dto';
+import { IServiceAccountDto } from './interfaces/dtos/service-account-dto.interface';
 
 @Injectable()
 export class FirebaseAdminService {
   constructor(private readonly configService: ConfigService) {
-    const credentialPath = this.configService.get(
-      EnvKey.SOCIAL_LOGIN_JSON_PATH,
+    const serviceAccountJson = this.configService.get(
+      EnvKey.GOOGLE_SERVICE_ACCOUNT,
+    );
+
+    const serviceAccountObject: IServiceAccountDto = JSON.parse(
+      serviceAccountJson,
     );
 
     admin.initializeApp({
-      credential: admin.credential.cert(credentialPath),
+      credential: admin.credential.cert({
+        clientEmail: serviceAccountObject.client_email,
+        privateKey: serviceAccountObject.private_key,
+        projectId: serviceAccountObject.project_id,
+      }),
     });
   }
 
