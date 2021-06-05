@@ -25,6 +25,9 @@ export class UserEntity extends Document implements IUserEntity, IBaseEntity {
   @Prop({ default: UserRoles.USER, enum: UserRoles })
   role: UserRoles;
 
+  @Prop({ default: false })
+  blocked: boolean;
+
   static toDto(input: UserEntity): UserDto {
     return {
       email: input.email,
@@ -32,6 +35,7 @@ export class UserEntity extends Document implements IUserEntity, IBaseEntity {
       id: input.id,
       profilePicture: input.profilePicture,
       userName: input.userName,
+      blocked: input.blocked,
     };
   }
 }

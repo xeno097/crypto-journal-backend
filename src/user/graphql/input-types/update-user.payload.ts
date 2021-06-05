@@ -8,4 +8,7 @@ export class UpdateUserPayloadInput implements IUpdateUserPayloadInput {
 
   @Field({ nullable: true })
   profilePicture?: string;
+
+  @Field({ nullable: true })
+  blocked?: boolean;
 }

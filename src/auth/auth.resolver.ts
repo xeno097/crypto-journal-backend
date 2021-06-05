@@ -47,4 +47,21 @@ export class AuthResolver {
       return getError(error);
     }
   }
+
+  @Mutation(() => AuthResult)
+  public async refreshToken(
+    @Args(FieldName.INPUT) token: string,
+  ): Promise<typeof AuthResult> {
+    try {
+      const [err, res] = await this.authService.refreshToken({ token });
+
+      if (err) {
+        return getError(err);
+      }
+
+      return res;
+    } catch (error) {
+      return getError(error);
+    }
+  }
 }

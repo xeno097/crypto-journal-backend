@@ -7,6 +7,7 @@ import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-ctx.util';
 import { EnvKey } from './shared/enums/env-keys.enum';
+import { CommonJwtModule } from './common-jwt/common-jwt.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { EnvKey } from './shared/enums/env-keys.enum';
     }),
     EmailModule,
     AuthModule,
+    CommonJwtModule,
   ],
   controllers: [],
   providers: [],

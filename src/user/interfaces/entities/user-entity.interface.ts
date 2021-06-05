@@ -5,4 +5,5 @@ export interface IUserEntity {
   profilePicture?: string;
   email: string;
   role: UserRoles;
+  blocked: boolean;
 }

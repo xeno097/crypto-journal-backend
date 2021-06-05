@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { EnvKey } from 'src/shared/enums/env-keys.enum';
 import { UserDto } from 'src/user/dtos/user.dto';
 import { GetLoggedUserDto } from './dtos/get-logged-user.dto';
+import { BlockedUserError } from 'src/errors/blocked-user.error';
 
 @Injectable()
 export class AuthService {
@@ -21,6 +22,9 @@ export class AuthService {
     private readonly firebaseAdminService: FirebaseAdminService,
   ) {}
 
+  // TODO: store refresh token in db
+
+  // TODO: remove used refresh token from db
   public async signIn(signInDto: SignInDto): Promise<[Error, AuthPayloadDto]> {
     try {
       // Get token
@@ -49,22 +53,7 @@ export class AuthService {
       }
 
       // generate access token and refresh token
-
-      const { id, role } = user;
-      const jwtPayloadDto: JwtPayloadDto = { id, role, email };
-
-      const accessToken = this.jwtService.sign(jwtPayloadDto);
-      const refreshToken = this.jwtService.sign(jwtPayloadDto, {
-        secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
-        expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
-      });
-
-      // return access token, refresh token and user data
-      const authPayloadDto: AuthPayloadDto = {
-        accessToken,
-        refreshToken,
-        user,
-      };
+      const authPayloadDto: AuthPayloadDto = this.generateAuthPayload(user);
 
       return [null, authPayloadDto];
     } catch (error) {
@@ -94,6 +83,69 @@ export class AuthService {
       return [null, res];
     } catch (error) {
       return [error, null];
+    }
+  }
+
+  public async refreshToken(refreshTokenDto: {
+    token: string;
+  }): Promise<[Error, AuthPayloadDto]> {
+    try {
+      const { token } = refreshTokenDto;
+
+      const jwtPayloadDto: JwtPayloadDto = this.jwtService.verify(token, {
+        secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
+      });
+
+      const { id, email } = jwtPayloadDto;
+
+      const getLoggedUserDto: GetLoggedUserDto = {
+        id,
+        email,
+      };
+
+      const [err, user] = await this.userRepository.getOneEntity(
+        getLoggedUserDto,
+      );
+
+      if (err) {
+        return [err, null];
+      }
+
+      // return access token, refresh token and user data
+      const authPayloadDto: AuthPayloadDto = this.generateAuthPayload(user);
+
+      return [null, authPayloadDto];
+    } catch (error) {
+      return [error, null];
+    }
+  }
+
+  private generateAuthPayload(user: UserDto): AuthPayloadDto {
+    try {
+      const { id, email, role, blocked } = user;
+
+      if (blocked) {
+        throw new BlockedUserError();
+      }
+
+      const jwtPayloadDto: JwtPayloadDto = { id, role, email };
+
+      const accessToken = this.jwtService.sign(jwtPayloadDto);
+      const refreshToken = this.jwtService.sign(jwtPayloadDto, {
+        secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
+        expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
+      });
+
+      // return access token, refresh token and user data
+      const authPayloadDto: AuthPayloadDto = {
+        accessToken,
+        refreshToken,
+        user,
+      };
+
+      return authPayloadDto;
+    } catch (error) {
+      throw error;
     }
   }
 }
