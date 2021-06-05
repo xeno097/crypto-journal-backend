@@ -1,0 +1,30 @@
+name: app-deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.APP_NAME}}
+          heroku_email: ${{secrets.ACCOUNT_EMAIL}}
+          usedocker: true
+        env:
+          NODE_ENV: production
+          HD_DB_URI: ${{ secrets.DB_URI }}
+          HD_EMAIL_USER: ${{secrets.EMAIL_USER}}
+          HD_EMAIL_API_KEY: ${{secrets.EMAIL_API_KEY}}
+          HD_EMAIL_SERVICE: ${{secrets.EMAIL_SERVICE}}
+          HD_EMAIL_FROM: ${{secrets.EMAIL_FROM}}
+          HD_ACCESS_TOKEN_SECRET: ${{secrets.ACCESS_TOKEN_SECRET}}
+          HD_ACCESS_TOKEN_EXP: ${{secrets.ACCESS_TOKEN_EXP}}
+          HD_REFRESH_TOKEN_SECRET: ${{secrets.REFRESH_TOKEN_SECRET}}
+          HD_REFRESH_TOKEN_EXP: ${{secrets.REFRESH_TOKEN_EXP}}
+          HD_GOOGLE_SERVICE_ACCOUNT: ${{secrets.GOOGLE_SERVICE_ACCOUNT}}
