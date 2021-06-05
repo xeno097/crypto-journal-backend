@@ -3,4 +3,5 @@ import { IUpdateUserPayloadDto } from '../interfaces/dtos/update-user-payload.in
 export class UpdateUserPayloadDto implements IUpdateUserPayloadDto {
   profilePicture?: string;
   userName?: string;
+  blocked?: boolean;
 }
