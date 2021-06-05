@@ -1,7 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { InvalidJwtFormatError } from 'src/errors/invalid-jwt-format.error';
 import { ICustomGqlContext } from '../interfaces/custom-gql-context.interface';
 import { JwtExpiredError } from 'src/errors/jwt-expired.error';
 import { Reflector } from '@nestjs/core';
@@ -9,6 +8,7 @@ import { UserRoles } from '../enums/user-roles.enum';
 import { AUTHORIZED_ROLES_KEY } from '../decorators/authorized-roles.decorator';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
 import { UnauthorizedUserError } from 'src/errors/unauthorized-user.error';
+import { InvalidJwtFormatError } from 'src/errors/auth/invalid-jwt-format.error';
 
 @Injectable()
 export class GqlAuthGuard implements CanActivate {
