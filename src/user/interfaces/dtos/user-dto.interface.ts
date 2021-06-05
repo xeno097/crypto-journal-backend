@@ -6,4 +6,5 @@ export interface IUserDto {
   profilePicture?: string;
   email: string;
   role: UserRoles;
+  blocked: boolean;
 }
