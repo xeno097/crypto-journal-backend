@@ -43,7 +43,9 @@ export class UserEntity extends Document implements IUserEntity, IBaseEntity {
 export const UserEntitySchema = SchemaFactory.createForClass(UserEntity);
 
 UserEntitySchema.pre('validate', function(next) {
-  this.id = this._id;
+  if (this.isNew) {
+    this.id = this._id;
+  }
 
   next();
 });
