@@ -6,6 +6,7 @@ import {
   OperationEntity,
   OperationEntitySchema,
 } from './database/operation.entity';
+import { OperationRepository } from './operation.repository';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import {
       },
     ]),
   ],
-  providers: [OperationService, OperationResolver],
+  providers: [OperationService, OperationResolver, OperationRepository],
 })
 export class OperationModule {}
