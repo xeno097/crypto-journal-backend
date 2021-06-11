@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { OperationEntity } from './database/operation.entity';
+import { CreateOperationDto } from './dtos/create-operation.dto';
 import { OperationDto } from './dtos/operation.dto';
+import { UpdateOperationDto } from './dtos/update-operation.dto';
 
 @Injectable()
 export class OperationRepository {
@@ -37,12 +39,7 @@ export class OperationRepository {
     }
   }
 
-  public async getEntities() {
-    try {
-    } catch (error) {}
-  }
-
-  public async countEntities(filter = {}) {
+  public async getEntities(filter = {}): Promise<[Error, OperationDto[]]> {
     try {
       const res = await this.operationModel.find(filter);
 
@@ -57,23 +54,73 @@ export class OperationRepository {
     }
   }
 
-  public async aggregateEntities() {
+  public async countEntities(filter = {}): Promise<[Error, number]> {
     try {
-    } catch (error) {}
+      const res = await this.operationModel.find(filter).count();
+
+      return [null, res];
+    } catch (error) {
+      return [error, null];
+    }
   }
 
-  public async createEntity() {
+  public async aggregateEntities(pipeline: any[]): Promise<[Error, any]> {
     try {
-    } catch (error) {}
+      const result = await this.operationModel.aggregate(pipeline);
+
+      return [null, result];
+    } catch (error) {
+      return [error, null];
+    }
   }
 
-  public async updateEntity() {
+  public async createEntity(
+    createEntityDto: CreateOperationDto,
+  ): Promise<[Error, OperationDto]> {
     try {
-    } catch (error) {}
+      const newEntity = new this.operationModel(createEntityDto);
+
+      await newEntity.save();
+
+      return [null, OperationEntity.toDto(newEntity)];
+    } catch (error) {
+      return [error, null];
+    }
   }
 
-  public async deleteOneEntity() {
+  public async updateEntity(
+    updateEntityDto: UpdateOperationDto,
+  ): Promise<[Error, OperationDto]> {
     try {
+      const { getOneEntityDto, updateEntityPayload } = updateEntityDto;
+
+      const updatedEntity = await this.operationModel.findOneAndUpdate(
+        getOneEntityDto,
+        updateEntityPayload,
+        {
+          new: true,
+        },
+      );
+
+      if (!updatedEntity) {
+        throw new Error();
+      }
+
+      return [null, OperationEntity.toDto(updatedEntity)];
+    } catch (error) {
+      return [error, null];
+    }
+  }
+
+  public async deleteOneEntity(
+    getOneEntityDto: any,
+  ): Promise<[Error, OperationDto]> {
+    try {
+      const deletedEntity = await this._getOneEntity(getOneEntityDto);
+
+      await deletedEntity.delete();
+
+      return [null, OperationEntity.toDto(deletedEntity)];
     } catch (error) {}
   }
 }
