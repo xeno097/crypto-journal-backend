@@ -10,6 +10,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
+import { idFieldOptions } from './graphql/options/id-input-field.options';
 
 @Resolver()
 @AuthorizedRoles(UserRoles.ADMIN)
@@ -26,7 +27,7 @@ export class UserResolver {
 
   @Query(() => UserResult)
   public async getUserById(
-    @Args(FieldName.ID) id: string,
+    @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
     try {
       const [err, res] = await this.userService.getUserById({ id });
@@ -99,7 +100,7 @@ export class UserResolver {
 
   @Mutation(() => UserResult)
   public async deleteUser(
-    @Args(FieldName.ID) id: string,
+    @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
     try {
       const [err, res] = await this.userService.deleteUserById({ id });

@@ -9,6 +9,7 @@ export enum ErrorCode {
   EXPIRED_JWT = 'expired-jwt',
   UNAUTHORIZED_USER = 'unauthorized-user',
   BLOCKED_USER = 'blocked-user',
+  OPERATION_NOT_FOUND = 'operation-not-found',
 }
 
 registerEnumType(ErrorCode, {

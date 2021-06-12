@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-ctx.util';
 import { EnvKey } from './shared/enums/env-keys.enum';
 import { CommonJwtModule } from './common-jwt/common-jwt.module';
+import { OperationModule } from './operation/operation.module';
+import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { CommonJwtModule } from './common-jwt/common-jwt.module';
 
         return {
           uri: dbUri,
+          useFindAndModify: false,
+          useCreateIndex: true,
         };
       },
     }),
@@ -34,8 +38,9 @@ import { CommonJwtModule } from './common-jwt/common-jwt.module';
     EmailModule,
     AuthModule,
     CommonJwtModule,
+    OperationModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [GqlExceptionFilter],
 })
 export class AppModule {}

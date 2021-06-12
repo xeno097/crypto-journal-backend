@@ -5,7 +5,6 @@ import { UserRepository } from './user.repository';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserEntity, UserEntitySchema } from './database/user.entity';
 import { CommonJwtModule } from 'src/common-jwt/common-jwt.module';
-import { GqlExceptionFilter } from 'src/shared/filters/graphql-exception.filter';
 
 @Module({
   imports: [
@@ -17,7 +16,7 @@ import { GqlExceptionFilter } from 'src/shared/filters/graphql-exception.filter'
     ]),
     CommonJwtModule,
   ],
-  providers: [UserService, UserResolver, UserRepository, GqlExceptionFilter],
+  providers: [UserService, UserResolver, UserRepository],
   exports: [UserRepository],
 })
 export class UserModule {}
