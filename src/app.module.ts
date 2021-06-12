@@ -25,6 +25,8 @@ import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
 
         return {
           uri: dbUri,
+          useFindAndModify: false,
+          useCreateIndex: true,
         };
       },
     }),
