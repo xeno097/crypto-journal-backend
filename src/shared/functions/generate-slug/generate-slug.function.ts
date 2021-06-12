@@ -1,9 +1,13 @@
 import { randomBytes } from 'crypto';
 import slugify from 'slugify';
+import { InvalidOperationInput } from 'src/errors/shared/invalid-operation-input.error';
 
 export const generateSlug = (input: string[], unique = false) => {
   if (!input || input.length === 0) {
-    throw new Error('Invalid input');
+    throw new InvalidOperationInput(
+      'generateSlug',
+      'Received null | undefined | empty array',
+    );
   }
 
   const inputCopy = [...input];
