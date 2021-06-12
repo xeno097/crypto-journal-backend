@@ -122,6 +122,8 @@ export class OperationRepository {
       await deletedEntity.delete();
 
       return [null, OperationEntity.toDto(deletedEntity)];
-    } catch (error) {}
+    } catch (error) {
+      return [error, null];
+    }
   }
 }
