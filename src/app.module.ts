@@ -9,6 +9,7 @@ import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-c
 import { EnvKey } from './shared/enums/env-keys.enum';
 import { CommonJwtModule } from './common-jwt/common-jwt.module';
 import { OperationModule } from './operation/operation.module';
+import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
 
 @Module({
   imports: [
@@ -24,6 +25,8 @@ import { OperationModule } from './operation/operation.module';
 
         return {
           uri: dbUri,
+          useFindAndModify: false,
+          useCreateIndex: true,
         };
       },
     }),
@@ -38,6 +41,6 @@ import { OperationModule } from './operation/operation.module';
     OperationModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [GqlExceptionFilter],
 })
 export class AppModule {}

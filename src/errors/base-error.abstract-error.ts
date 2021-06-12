@@ -12,4 +12,11 @@ export abstract class BaseError extends Error implements IBaseError {
 
     Object.setPrototypeOf(this, BaseError.prototype);
   }
+
+  protected getErrorMessage(context: string, reason: string) {
+    const _message = `[${context.toUpperCase()}]: ${reason}`;
+
+    this.message =
+      process.env?.NODE_ENV !== 'production' ? _message : this.message;
+  }
 }

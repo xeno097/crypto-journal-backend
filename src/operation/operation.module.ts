@@ -7,9 +7,11 @@ import {
   OperationEntitySchema,
 } from './database/operation.entity';
 import { OperationRepository } from './operation.repository';
+import { CommonJwtModule } from 'src/common-jwt/common-jwt.module';
 
 @Module({
   imports: [
+    CommonJwtModule,
     MongooseModule.forFeature([
       {
         name: OperationEntity.name,
