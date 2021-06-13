@@ -10,6 +10,7 @@ import { EnvKey } from './shared/enums/env-keys.enum';
 import { CommonJwtModule } from './common-jwt/common-jwt.module';
 import { OperationModule } from './operation/operation.module';
 import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
     AuthModule,
     CommonJwtModule,
     OperationModule,
+    TransactionModule,
   ],
   controllers: [],
   providers: [GqlExceptionFilter],
