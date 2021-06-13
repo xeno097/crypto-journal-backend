@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema } from 'mongoose';
 import { OperationType } from 'src/operation/enums/operation-type.enum';
 import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
+import { TransactionDto } from '../dtos/transaction.dto';
 import { ITransactionEntity } from '../interfaces/entities/transaction-entity.interface';
 
 @Schema({
@@ -39,6 +40,21 @@ export class TransactionEntity extends Document
 
   @Prop({ required: true, type: MongoSchema.Types.ObjectId })
   operation: string;
+
+  static toDto(input: TransactionEntity): TransactionDto {
+    return {
+      coinPrice: input.coinPrice,
+      coinSymbol: input.coinSymbol,
+      coins: input.coins,
+      cost: input.cost,
+      date: input.date,
+      fee: input.fee,
+      id: input.id,
+      operation: input.operation,
+      operationType: input.operationType,
+      user: input.user,
+    };
+  }
 }
 
 export const TransactionEntitySchema = SchemaFactory.createForClass(
