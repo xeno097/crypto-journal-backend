@@ -20,5 +20,6 @@ import { CommonJwtModule } from 'src/common-jwt/common-jwt.module';
     ]),
   ],
   providers: [OperationService, OperationResolver, OperationRepository],
+  exports: [OperationRepository],
 })
 export class OperationModule {}
