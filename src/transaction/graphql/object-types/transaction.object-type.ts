@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { OperationType } from 'src/operation/graphql/object-types/operation.object-type';
+import { OperationResult } from 'src/operation/graphql/union-types/operation-result.union-type';
 import { ITransactionType } from 'src/transaction/interfaces/object-types/transaction-object-type.interface';
 
 export const transactionTypeName = 'Transaction';
@@ -27,6 +27,6 @@ export class TransactionType implements ITransactionType {
   @Field()
   date: string;
 
-  @Field(() => OperationType)
+  @Field(() => OperationResult)
   operation: string;
 }

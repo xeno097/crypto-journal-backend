@@ -1,8 +1,18 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
+import { OperationType } from 'src/operation/enums/operation-type.enum';
+import { OperationService } from 'src/operation/operation.service';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { GqlJwtPayload } from 'src/shared/decorators/jwt-payload.decorator';
+import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-own-entity-by-id.dto';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
@@ -12,13 +22,17 @@ import { AuthorizedCreateTransactionDto } from './dtos/authorized-create-transac
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { CreateTransactionInputType } from './graphql/input-types/create-transaction.input-type';
 import { UpdateTransactionInputType } from './graphql/input-types/update-transaction.input-type';
+import { TransactionType } from './graphql/object-types/transaction.object-type';
 import { TransactionResult } from './graphql/union-types/transaction-result.union-type';
 import { TransactionService } from './transaction.service';
 
-@Resolver()
+@Resolver(() => TransactionType)
 @UseGuards(GqlAuthGuard)
 export class TransactionResolver {
-  constructor(private readonly transactionService: TransactionService) {}
+  constructor(
+    private readonly transactionService: TransactionService,
+    private readonly operationService: OperationService,
+  ) {}
 
   @Query(() => TransactionResult)
   @AuthorizedRoles(UserRoles.ADMIN)
@@ -88,8 +102,25 @@ export class TransactionResolver {
     return res;
   }
 
-  // Business logic
+  // Field Resolvers
+  @ResolveField(() => OperationType)
+  public async operation(@Parent() parent: TransactionType) {
+    const getOperationById: GetEntityByIdDto = {
+      id: parent.operation,
+    };
 
+    const [err, op] = await this.operationService.getOperationById(
+      getOperationById,
+    );
+
+    if (err) {
+      return err;
+    }
+
+    return op;
+  }
+
+  // Business logic
   @Query(() => TransactionResult)
   public async getSelfTransactionById(
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
