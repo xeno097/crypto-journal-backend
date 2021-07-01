@@ -9,7 +9,6 @@ import { TransactionDto } from './dtos/transaction.dto';
 import { UpdateTransactionDto } from './dtos/update/update-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
-import { AuthorizedCreateTransactionPayloadDto } from './dtos/create/authorized-create-transaction-payload.dto';
 
 @Injectable()
 export class TransactionService {
@@ -53,7 +52,6 @@ export class TransactionService {
 
     const createTransactionDto: CreateTransactionDto = {
       ...operationDto,
-      cost: this._getTransactionCost(operationDto),
       operationType: op.type,
       user: id,
     };
@@ -63,14 +61,6 @@ export class TransactionService {
     );
 
     return res;
-  }
-
-  private _getTransactionCost(
-    authorizedCreateTransactionPayloadDto: AuthorizedCreateTransactionPayloadDto,
-  ) {
-    const { coinPrice, fee, coins } = authorizedCreateTransactionPayloadDto;
-
-    return coinPrice + fee + coins;
   }
 
   public async updateTransaction(

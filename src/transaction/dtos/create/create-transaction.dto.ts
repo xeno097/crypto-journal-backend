@@ -4,7 +4,6 @@ import { ICreateTransactionDto } from 'src/transaction/interfaces/dtos/create-tr
 export class CreateTransactionDto implements ICreateTransactionDto {
   coinSymbol: string;
   coins: number;
-  cost: number;
   fee: number;
   coinPrice: number;
   date: string;

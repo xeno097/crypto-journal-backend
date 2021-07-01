@@ -13,9 +13,6 @@ export class UpdateTransactionPayloadInputType
   coins?: number;
 
   @Field({ nullable: true })
-  cost?: number;
-
-  @Field({ nullable: true })
   fee?: number;
 
   @Field({ nullable: true })
