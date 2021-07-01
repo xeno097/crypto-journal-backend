@@ -4,7 +4,6 @@ export class AuthorizedCreateTransactionPayloadDto
   implements IAuthorizedCreateTransactionPayloadDto {
   coinSymbol: string;
   coins: number;
-  cost: number;
   fee: number;
   coinPrice: number;
   date: string;

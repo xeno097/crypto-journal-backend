@@ -11,9 +11,6 @@ export class CreateTransactionInputType implements ICreateTransactionInputType {
   @Field()
   coins: number;
 
-  @Field()
-  cost: number;
-
   @Field({ defaultValue: 0 })
   fee: number;
 
