@@ -67,7 +67,7 @@ export class TransactionService {
     authorizedUpdateTransactionDto: AuthorizedUpdateTransactionDto,
   ): Promise<[BaseError, TransactionDto]> {
     const { operationDto } = authorizedUpdateTransactionDto;
-    const { data } = operationDto;
+    const { updateEntityPayload: data } = operationDto;
 
     const { operation } = data;
 
@@ -87,10 +87,10 @@ export class TransactionService {
   ): Promise<[BaseError, TransactionDto]> {
     const { jwtPayloadDto, operationDto } = authorizedUpdateTransactionDto;
     const { id: user } = jwtPayloadDto;
-    const { where, data } = operationDto;
-    const { id } = where;
+    const { getOneEntityDto, updateEntityPayload } = operationDto;
+    const { id } = getOneEntityDto;
 
-    const { operation } = data;
+    const { operation } = updateEntityPayload;
 
     const [err, op] = await this.operationRepository.getOneEntity({
       id: operation,
@@ -110,7 +110,7 @@ export class TransactionService {
     const updateTransactionDto: UpdateTransactionDto = {
       getOneEntityDto: getSelfTransactionByIdDto,
       updateEntityPayload: {
-        ...data,
+        ...updateEntityPayload,
         operation,
         operationType: type,
       },
@@ -128,7 +128,7 @@ export class TransactionService {
   ): Promise<[BaseError, TransactionDto]> {
     const { jwtPayloadDto, operationDto } = authorizedUpdateTransactionDto;
     const { id: user } = jwtPayloadDto;
-    const { where, data } = operationDto;
+    const { getOneEntityDto: where, updateEntityPayload: data } = operationDto;
     const { id } = where;
 
     const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {

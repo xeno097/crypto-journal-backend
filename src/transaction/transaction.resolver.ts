@@ -86,9 +86,14 @@ export class TransactionResolver {
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
     @Args(FieldName.INPUT) updateTransactionInput: UpdateTransactionInputType,
   ): Promise<typeof TransactionResult> {
+    const { data, where } = updateTransactionInput;
+
     const auhtorizedUpdateTransactionDto: AuthorizedUpdateTransactionDto = {
       jwtPayloadDto,
-      operationDto: updateTransactionInput,
+      operationDto: {
+        getOneEntityDto: where,
+        updateEntityPayload: data,
+      },
     };
 
     const [err, res] = await this.transactionService.updateTransaction(
