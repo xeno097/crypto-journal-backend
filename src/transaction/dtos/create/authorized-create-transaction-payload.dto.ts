@@ -1,4 +1,4 @@
-import { IAuthorizedCreateTransactionPayloadDto } from '../interfaces/dtos/authorized-create-transaction-payload-dto.interface';
+import { IAuthorizedCreateTransactionPayloadDto } from '../../interfaces/dtos/authorized-create-transaction-payload-dto.interface';
 
 export class AuthorizedCreateTransactionPayloadDto
   implements IAuthorizedCreateTransactionPayloadDto {

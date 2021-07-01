@@ -18,7 +18,7 @@ import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { idFieldOptions } from 'src/user/graphql/options/id-input-field.options';
-import { AuthorizedCreateTransactionDto } from './dtos/authorized-create-transaction.dto';
+import { AuthorizedCreateTransactionDto } from './dtos/create/authorized-create-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { CreateTransactionInputType } from './graphql/input-types/create-transaction.input-type';
 import { UpdateTransactionInputType } from './graphql/input-types/update-transaction.input-type';

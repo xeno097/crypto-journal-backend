@@ -3,10 +3,10 @@ import { BaseError } from 'src/errors/base-error.abstract-error';
 import { OperationRepository } from 'src/operation/operation.repository';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-own-entity-by-id.dto';
-import { AuthorizedCreateTransactionDto } from './dtos/authorized-create-transaction.dto';
-import { CreateTransactionDto } from './dtos/create-transaction.dto';
+import { AuthorizedCreateTransactionDto } from './dtos/create/authorized-create-transaction.dto';
+import { CreateTransactionDto } from './dtos/create/create-transaction.dto';
 import { TransactionDto } from './dtos/transaction.dto';
-import { UpdateTransactionDto } from './dtos/update-transaction.dto';
+import { UpdateTransactionDto } from './dtos/update/update-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
 

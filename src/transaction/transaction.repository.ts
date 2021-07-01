@@ -4,9 +4,9 @@ import { Model } from 'mongoose';
 import { BaseError } from 'src/errors/base-error.abstract-error';
 import { TransactionNotFoundError } from 'src/errors/transaction/transaction-not-found.error';
 import { TransactionEntity } from './database/transaction.entity';
-import { CreateTransactionDto } from './dtos/create-transaction.dto';
+import { CreateTransactionDto } from './dtos/create/create-transaction.dto';
 import { TransactionDto } from './dtos/transaction.dto';
-import { UpdateTransactionDto } from './dtos/update-transaction.dto';
+import { UpdateTransactionDto } from './dtos/update/update-transaction.dto';
 
 @Injectable()
 export class TransactionRepository {
