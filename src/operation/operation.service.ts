@@ -13,66 +13,42 @@ export class OperationService {
   public async getOperationById(
     getOperationByIdDto: GetEntityByIdDto,
   ): Promise<[BaseError, OperationDto]> {
-    try {
-      const res = await this.operationRepository.getOneEntity(
-        getOperationByIdDto,
-      );
+    const res = await this.operationRepository.getOneEntity(
+      getOperationByIdDto,
+    );
 
-      return res;
-    } catch (error) {
-      return [error, null];
-    }
+    return res;
   }
 
-  public async getOperations(): Promise<[Error, OperationDto[]]> {
-    try {
-      const res = await this.operationRepository.getEntities();
+  public async getOperations(): Promise<[BaseError, OperationDto[]]> {
+    const res = await this.operationRepository.getEntities();
 
-      return res;
-    } catch (error) {
-      return [error, null];
-    }
+    return res;
   }
 
   public async createOperation(
     createOperationDto: CreateOperationDto,
-  ): Promise<[Error, OperationDto]> {
-    try {
-      const res = await this.operationRepository.createEntity(
-        createOperationDto,
-      );
+  ): Promise<[BaseError, OperationDto]> {
+    const res = await this.operationRepository.createEntity(createOperationDto);
 
-      return res;
-    } catch (error) {
-      return [error, null];
-    }
+    return res;
   }
 
   public async updateOperation(
     updateOperationDto: UpdateOperationDto,
-  ): Promise<[Error, OperationDto]> {
-    try {
-      const res = await this.operationRepository.updateEntity(
-        updateOperationDto,
-      );
+  ): Promise<[BaseError, OperationDto]> {
+    const res = await this.operationRepository.updateEntity(updateOperationDto);
 
-      return res;
-    } catch (error) {
-      return [error, null];
-    }
+    return res;
   }
 
   public async deleteOperationById(
     getOperationByIdDto: GetEntityByIdDto,
-  ): Promise<[Error, OperationDto]> {
-    try {
-      const res = await this.operationRepository.deleteOneEntity(
-        getOperationByIdDto,
-      );
+  ): Promise<[BaseError, OperationDto]> {
+    const res = await this.operationRepository.deleteOneEntity(
+      getOperationByIdDto,
+    );
 
-      return res;
-    } catch (error) {
-      return [error, null];
-    }
+    return res;
   }
 }
