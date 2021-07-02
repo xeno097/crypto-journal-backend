@@ -95,19 +95,13 @@ export class UserRepository {
     try {
       const { getOneEntityDto, updateEntityPayload } = updateEntityDto;
 
-      const updatedEntity = await this.userModel.findOneAndUpdate(
-        getOneEntityDto,
-        updateEntityPayload,
-        {
-          new: true,
-        },
-      );
+      const entityToUpdate = await this._getOneEntity(getOneEntityDto);
 
-      if (!updatedEntity) {
-        throw new UserNotFoundError();
-      }
+      entityToUpdate.set(updateEntityPayload);
 
-      return [null, UserEntity.toDto(updatedEntity)];
+      await entityToUpdate.save();
+
+      return [null, UserEntity.toDto(entityToUpdate)];
     } catch (error) {
       return [error, null];
     }
