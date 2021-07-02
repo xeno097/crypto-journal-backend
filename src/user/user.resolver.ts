@@ -29,89 +29,69 @@ export class UserResolver {
   public async getUserById(
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.getUserById({ id });
+    const [err, res] = await this.userService.getUserById({ id });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Query(() => [UserResult])
   public async getUsers(): Promise<Array<typeof UserResult>> {
-    try {
-      const [err, res] = await this.userService.getUsers();
+    const [err, res] = await this.userService.getUsers();
 
-      if (err) {
-        return [getError(err)];
-      }
-
-      return res;
-    } catch (error) {
-      return [getError(error)];
+    if (err) {
+      return [getError(err)];
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async createUser(
     @Args(FieldName.INPUT) createUserInput: CreateUserInput,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.createUser(createUserInput);
+    const [err, res] = await this.userService.createUser(createUserInput);
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async updateUser(
     @Args(FieldName.INPUT) updateUserInput: UpdateUserInput,
   ): Promise<typeof UserResult> {
-    try {
-      const { data, where } = updateUserInput;
+    const { data, where } = updateUserInput;
 
-      const updateUserDto: UpdateUserDto = {
-        getOneEntityDto: where,
-        updateEntityPayload: data,
-      };
+    const updateUserDto: UpdateUserDto = {
+      getOneEntityDto: where,
+      updateEntityPayload: data,
+    };
 
-      const [err, res] = await this.userService.updateUser(updateUserDto);
+    const [err, res] = await this.userService.updateUser(updateUserDto);
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async deleteUser(
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.deleteUserById({ id });
+    const [err, res] = await this.userService.deleteUserById({ id });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 }
