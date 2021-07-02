@@ -6,7 +6,7 @@ import { UserRoles } from 'src/shared/enums/user-roles.enum';
 import { generateSlug } from 'src/shared/functions/generate-slug/generate-slug.function';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
-import { idFieldOptions } from 'src/user/graphql/options/id-input-field.options';
+import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { CreateOperationDto } from './dtos/create-operation.dto';
 import { UpdateOperationDto } from './dtos/update-operation.dto';
 import { CreateOperationInputType } from './graphql/input-types/create-operation.input-type';

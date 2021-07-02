@@ -1,9 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
-import { ICreateUserInput } from 'src/user/interfaces/input-types/create-user-input-type.interface';
+import { ICreateUserInputType } from 'src/user/interfaces/input-types/create-user-input-type.interface';
 
-@InputType()
-export class CreateUserInput implements ICreateUserInput {
+const CreateUserInputTypeName = 'CreateUserInput';
+
+@InputType(CreateUserInputTypeName)
+export class CreateUserInputType implements ICreateUserInputType {
   @Field()
   userName: string;
 

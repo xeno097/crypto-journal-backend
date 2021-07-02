@@ -1,4 +1,4 @@
 export interface IUpdateEntityInputType {
-  where: any;
+  where: Record<string, any>;
   data: Record<string, any>;
 }

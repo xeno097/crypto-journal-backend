@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
-import { CreateUserInput } from './graphql/input-types/create-user.input-type';
-import { UpdateUserInput } from './graphql/input-types/update-user.input-type';
+import { CreateUserInputType } from './graphql/input-types/create-user.input-type';
+import { UpdateUserInputType } from './graphql/input-types/update-user.input-type';
 import { UserResult } from './graphql/union-types/user-result.union-type';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
@@ -10,7 +10,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
-import { idFieldOptions } from './graphql/options/id-input-field.options';
+import { idFieldOptions } from '../shared/graphql/options/id-input-field.options';
 
 @Resolver()
 @AuthorizedRoles(UserRoles.ADMIN)
@@ -51,7 +51,7 @@ export class UserResolver {
 
   @Mutation(() => UserResult)
   public async createUser(
-    @Args(FieldName.INPUT) createUserInput: CreateUserInput,
+    @Args(FieldName.INPUT) createUserInput: CreateUserInputType,
   ): Promise<typeof UserResult> {
     const [err, res] = await this.userService.createUser(createUserInput);
 
@@ -64,7 +64,7 @@ export class UserResolver {
 
   @Mutation(() => UserResult)
   public async updateUser(
-    @Args(FieldName.INPUT) updateUserInput: UpdateUserInput,
+    @Args(FieldName.INPUT) updateUserInput: UpdateUserInputType,
   ): Promise<typeof UserResult> {
     const { data, where } = updateUserInput;
 
