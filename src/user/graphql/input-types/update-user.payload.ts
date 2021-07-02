@@ -1,8 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IUpdateUserPayloadInput } from 'src/user/interfaces/input-types/update-user-payload.interface';
+import { IUpdateUserPayloadType } from 'src/user/interfaces/input-types/update-user-payload.interface';
 
-@InputType()
-export class UpdateUserPayloadInput implements IUpdateUserPayloadInput {
+const UpdateUserPayloadTypeName = 'UpdateUserPayload';
+
+@InputType(UpdateUserPayloadTypeName)
+export class UpdateUserPayloadType implements IUpdateUserPayloadType {
   @Field({ nullable: true })
   userName?: string;
 

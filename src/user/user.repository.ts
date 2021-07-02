@@ -14,7 +14,9 @@ export class UserRepository {
     @InjectModel(UserEntity.name) private readonly userModel: Model<UserEntity>,
   ) {}
 
-  private async _getOneEntity(getOneEntityDto: any): Promise<UserEntity> {
+  private async _getOneEntity(
+    getOneEntityDto: Record<string, any>,
+  ): Promise<UserEntity> {
     try {
       const entity = await this.userModel.findOne(getOneEntityDto);
 
@@ -29,7 +31,7 @@ export class UserRepository {
   }
 
   public async getOneEntity(
-    getOneEntityDto: any,
+    getOneEntityDto: Record<string, any>,
   ): Promise<[BaseError, UserDto]> {
     try {
       const result = await this._getOneEntity(getOneEntityDto);
@@ -108,7 +110,7 @@ export class UserRepository {
   }
 
   public async deleteOneEntity(
-    getOneEntityDto: any,
+    getOneEntityDto: Record<string, any>,
   ): Promise<[BaseError, UserDto]> {
     try {
       const deletedEntity = await this._getOneEntity(getOneEntityDto);

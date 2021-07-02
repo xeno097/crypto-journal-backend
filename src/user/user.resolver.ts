@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
-import { CreateUserInput } from './graphql/input-types/create-user.input-type';
-import { UpdateUserInput } from './graphql/input-types/update-user.input-type';
+import { CreateUserInputType } from './graphql/input-types/create-user.input-type';
+import { UpdateUserInputType } from './graphql/input-types/update-user.input-type';
 import { UserResult } from './graphql/union-types/user-result.union-type';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserService } from './user.service';
@@ -10,7 +10,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
-import { idFieldOptions } from './graphql/options/id-input-field.options';
+import { idFieldOptions } from '../shared/graphql/options/id-input-field.options';
 
 @Resolver()
 @AuthorizedRoles(UserRoles.ADMIN)
@@ -29,89 +29,69 @@ export class UserResolver {
   public async getUserById(
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.getUserById({ id });
+    const [err, res] = await this.userService.getUserById({ id });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Query(() => [UserResult])
   public async getUsers(): Promise<Array<typeof UserResult>> {
-    try {
-      const [err, res] = await this.userService.getUsers();
+    const [err, res] = await this.userService.getUsers();
 
-      if (err) {
-        return [getError(err)];
-      }
-
-      return res;
-    } catch (error) {
-      return [getError(error)];
+    if (err) {
+      return [getError(err)];
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async createUser(
-    @Args(FieldName.INPUT) createUserInput: CreateUserInput,
+    @Args(FieldName.INPUT) createUserInput: CreateUserInputType,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.createUser(createUserInput);
+    const [err, res] = await this.userService.createUser(createUserInput);
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async updateUser(
-    @Args(FieldName.INPUT) updateUserInput: UpdateUserInput,
+    @Args(FieldName.INPUT) updateUserInput: UpdateUserInputType,
   ): Promise<typeof UserResult> {
-    try {
-      const { data, where } = updateUserInput;
+    const { data, where } = updateUserInput;
 
-      const updateUserDto: UpdateUserDto = {
-        getOneEntityDto: where,
-        updateEntityPayload: data,
-      };
+    const updateUserDto: UpdateUserDto = {
+      getOneEntityDto: where,
+      updateEntityPayload: data,
+    };
 
-      const [err, res] = await this.userService.updateUser(updateUserDto);
+    const [err, res] = await this.userService.updateUser(updateUserDto);
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   public async deleteUser(
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.userService.deleteUserById({ id });
+    const [err, res] = await this.userService.deleteUserById({ id });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 }

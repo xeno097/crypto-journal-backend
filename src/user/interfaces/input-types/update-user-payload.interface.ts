@@ -1,4 +1,4 @@
-export interface IUpdateUserPayloadInput {
+export interface IUpdateUserPayloadType {
   userName?: string;
   profilePicture?: string;
   blocked?: boolean;
