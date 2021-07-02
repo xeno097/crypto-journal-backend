@@ -66,41 +66,12 @@ export class TransactionService {
   public async updateTransaction(
     authorizedUpdateTransactionDto: AuthorizedUpdateTransactionDto,
   ): Promise<[BaseError, TransactionDto]> {
-    const { operationDto } = authorizedUpdateTransactionDto;
-    const { updateEntityPayload } = operationDto;
-
-    const { operation } = updateEntityPayload;
-
-    if (operation) {
-      return await this._updateTransactionWithOperation(
-        authorizedUpdateTransactionDto,
-      );
-    }
-
-    return await this._updateTransactionWithoutOperation(
-      authorizedUpdateTransactionDto,
-    );
-  }
-
-  private async _updateTransactionWithOperation(
-    authorizedUpdateTransactionDto: AuthorizedUpdateTransactionDto,
-  ): Promise<[BaseError, TransactionDto]> {
     const { jwtPayloadDto, operationDto } = authorizedUpdateTransactionDto;
     const { id: user } = jwtPayloadDto;
     const { getOneEntityDto, updateEntityPayload } = operationDto;
     const { id } = getOneEntityDto;
 
     const { operation } = updateEntityPayload;
-
-    const [err, op] = await this.operationRepository.getOneEntity({
-      id: operation,
-    });
-
-    if (err) {
-      return [err, null];
-    }
-
-    const { type } = op;
 
     const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
       id,
@@ -111,40 +82,45 @@ export class TransactionService {
       getOneEntityDto: getSelfTransactionByIdDto,
       updateEntityPayload: {
         ...updateEntityPayload,
+      },
+    };
+
+    if (operation) {
+      return await this._updateTransactionWithOperation(
+        updateTransactionDto,
+        operation,
+      );
+    }
+
+    return await this.transactionRepository.updateEntity(updateTransactionDto);
+  }
+
+  private async _updateTransactionWithOperation(
+    updateTransactionDto: UpdateTransactionDto,
+    operation: string,
+  ): Promise<[BaseError, TransactionDto]> {
+    const [err, op] = await this.operationRepository.getOneEntity({
+      id: operation,
+    });
+
+    if (err) {
+      return [err, null];
+    }
+
+    const { type } = op;
+    const { getOneEntityDto, updateEntityPayload } = updateTransactionDto;
+
+    const updateTransactionWithOperationDto: UpdateTransactionDto = {
+      getOneEntityDto,
+      updateEntityPayload: {
+        ...updateEntityPayload,
         operation,
         operationType: type,
       },
     };
 
     const res = await this.transactionRepository.updateEntity(
-      updateTransactionDto,
-    );
-
-    return res;
-  }
-
-  private async _updateTransactionWithoutOperation(
-    authorizedUpdateTransactionDto: AuthorizedUpdateTransactionDto,
-  ): Promise<[BaseError, TransactionDto]> {
-    const { jwtPayloadDto, operationDto } = authorizedUpdateTransactionDto;
-    const { id: user } = jwtPayloadDto;
-    const { getOneEntityDto: where, updateEntityPayload: data } = operationDto;
-    const { id } = where;
-
-    const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
-      id,
-      user,
-    };
-
-    const updateTransactionDto: UpdateTransactionDto = {
-      getOneEntityDto: getSelfTransactionByIdDto,
-      updateEntityPayload: {
-        ...data,
-      },
-    };
-
-    const res = await this.transactionRepository.updateEntity(
-      updateTransactionDto,
+      updateTransactionWithOperationDto,
     );
 
     return res;
