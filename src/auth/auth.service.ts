@@ -41,7 +41,7 @@ export class AuthService {
     // search the user by email in the db
     let [err, user] = await this.userRepository.getOneEntity({ email });
 
-    if (err && (err as BaseError)?.code !== ErrorCode.USER_NOT_FOUND) {
+    if (err && (err as BaseError)?.code !== ErrorCode.ENTITY_NOT_FOUND) {
       return [err, null];
     }
 

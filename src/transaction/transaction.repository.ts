@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseError } from 'src/errors/base-error.abstract-error';
-import { TransactionNotFoundError } from 'src/errors/transaction/transaction-not-found.error';
+import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
 import { TransactionEntity } from './database/transaction.entity';
 import { CreateTransactionDto } from './dtos/create/create-transaction.dto';
 import { TransactionDto } from './dtos/transaction.dto';
@@ -22,7 +22,7 @@ export class TransactionRepository {
       const entity = await this.userModel.findOne(getOneEntityDto);
 
       if (!entity) {
-        throw new TransactionNotFoundError();
+        throw new EntityNotFoundError('Transaction');
       }
 
       return entity;

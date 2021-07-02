@@ -5,8 +5,8 @@ import { UserEntity } from './database/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { UserNotFoundError } from 'src/errors/user/user-not-found.error';
 import { BaseError } from 'src/errors/base-error.abstract-error';
+import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
 
 @Injectable()
 export class UserRepository {
@@ -21,7 +21,7 @@ export class UserRepository {
       const entity = await this.userModel.findOne(getOneEntityDto);
 
       if (!entity) {
-        throw new UserNotFoundError();
+        throw new EntityNotFoundError('User');
       }
 
       return entity;

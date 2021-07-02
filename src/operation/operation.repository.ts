@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseError } from 'src/errors/base-error.abstract-error';
-import { OperationNotFoundError } from 'src/errors/operation/operation-not-found.error';
+import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
 import { OperationEntity } from './database/operation.entity';
 import { CreateOperationDto } from './dtos/create-operation.dto';
 import { OperationDto } from './dtos/operation.dto';
@@ -22,7 +22,7 @@ export class OperationRepository {
       const entity = await this.operationModel.findOne(getOneEntityDto);
 
       if (!entity) {
-        throw new OperationNotFoundError();
+        throw new EntityNotFoundError('Operation');
       }
 
       return entity;

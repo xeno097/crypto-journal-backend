@@ -13,7 +13,7 @@ import { OperationService } from 'src/operation/operation.service';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { GqlJwtPayload } from 'src/shared/decorators/jwt-payload.decorator';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
-import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-own-entity-by-id.dto';
+import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-self-entity-by-id.dto';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
