@@ -6,6 +6,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UserDto } from './dtos/user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserNotFoundError } from 'src/errors/user/user-not-found.error';
+import { BaseError } from 'src/errors/base-error.abstract-error';
 
 @Injectable()
 export class UserRepository {
@@ -27,7 +28,9 @@ export class UserRepository {
     }
   }
 
-  public async getOneEntity(getOneEntityDto: any): Promise<[Error, UserDto]> {
+  public async getOneEntity(
+    getOneEntityDto: any,
+  ): Promise<[BaseError, UserDto]> {
     try {
       const result = await this._getOneEntity(getOneEntityDto);
 
@@ -37,7 +40,7 @@ export class UserRepository {
     }
   }
 
-  public async getEntities(filter = {}): Promise<[Error, UserDto[]]> {
+  public async getEntities(filter = {}): Promise<[BaseError, UserDto[]]> {
     try {
       const res = await this.userModel.find(filter);
 
@@ -52,7 +55,7 @@ export class UserRepository {
     }
   }
 
-  public async countEntities(filter = {}): Promise<[Error, number]> {
+  public async countEntities(filter = {}): Promise<[BaseError, number]> {
     try {
       const result = await this.userModel.count(filter);
 
@@ -62,7 +65,7 @@ export class UserRepository {
     }
   }
 
-  public async aggregateEntities(pipeline: any[]): Promise<[Error, any]> {
+  public async aggregateEntities(pipeline: any[]): Promise<[BaseError, any]> {
     try {
       const result = await this.userModel.aggregate(pipeline);
 
@@ -74,7 +77,7 @@ export class UserRepository {
 
   public async createEntity(
     createEntityDto: CreateUserDto,
-  ): Promise<[Error, UserDto]> {
+  ): Promise<[BaseError, UserDto]> {
     try {
       const newEntity = new this.userModel(createEntityDto);
 
@@ -88,23 +91,17 @@ export class UserRepository {
 
   public async updateEntity(
     updateEntityDto: UpdateUserDto,
-  ): Promise<[Error, UserDto]> {
+  ): Promise<[BaseError, UserDto]> {
     try {
       const { getOneEntityDto, updateEntityPayload } = updateEntityDto;
 
-      const updatedEntity = await this.userModel.findOneAndUpdate(
-        getOneEntityDto,
-        updateEntityPayload,
-        {
-          new: true,
-        },
-      );
+      const entityToUpdate = await this._getOneEntity(getOneEntityDto);
 
-      if (!updatedEntity) {
-        throw new UserNotFoundError();
-      }
+      entityToUpdate.set(updateEntityPayload);
 
-      return [null, UserEntity.toDto(updatedEntity)];
+      await entityToUpdate.save();
+
+      return [null, UserEntity.toDto(entityToUpdate)];
     } catch (error) {
       return [error, null];
     }
@@ -112,7 +109,7 @@ export class UserRepository {
 
   public async deleteOneEntity(
     getOneEntityDto: any,
-  ): Promise<[Error, UserDto]> {
+  ): Promise<[BaseError, UserDto]> {
     try {
       const deletedEntity = await this._getOneEntity(getOneEntityDto);
 
