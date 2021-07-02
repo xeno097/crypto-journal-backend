@@ -7,7 +7,7 @@ import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { UserResult } from 'src/user/graphql/union-types/user-result.union-type';
 import { AuthService } from './auth.service';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
-import { UpdateLoggedUserInput } from './graphql/input-types/update-logged-user.input-type';
+import { UpdateLoggedUserInputType } from './graphql/input-types/update-logged-user.input-type';
 import { AuthResult } from './graphql/union-types/auth-result.union-type';
 
 @Resolver()
@@ -18,17 +18,13 @@ export class AuthResolver {
   public async signIn(
     @Args(FieldName.INPUT) token: string,
   ): Promise<typeof AuthResult> {
-    try {
-      const [err, res] = await this.authService.signIn({ token });
+    const [err, res] = await this.authService.signIn({ token });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Query(() => UserResult)
@@ -36,55 +32,43 @@ export class AuthResolver {
   public async getLoggedUser(
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.authService.getLoggedUser(jwtPayloadDto);
+    const [err, res] = await this.authService.getLoggedUser(jwtPayloadDto);
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => AuthResult)
   public async refreshToken(
     @Args(FieldName.INPUT) token: string,
   ): Promise<typeof AuthResult> {
-    try {
-      const [err, res] = await this.authService.refreshToken({ token });
+    const [err, res] = await this.authService.refreshToken({ token });
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 
   @Mutation(() => UserResult)
   @UseGuards(GqlAuthGuard)
   public async updateLoggedUser(
-    @Args(FieldName.INPUT) updateLoggedUserInput: UpdateLoggedUserInput,
+    @Args(FieldName.INPUT) updateLoggedUserInput: UpdateLoggedUserInputType,
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
   ): Promise<typeof UserResult> {
-    try {
-      const [err, res] = await this.authService.updateLoggedUser(
-        updateLoggedUserInput,
-        jwtPayloadDto,
-      );
+    const [err, res] = await this.authService.updateLoggedUser(
+      updateLoggedUserInput,
+      jwtPayloadDto,
+    );
 
-      if (err) {
-        return getError(err);
-      }
-
-      return res;
-    } catch (error) {
-      return getError(error);
+    if (err) {
+      return getError(err);
     }
+
+    return res;
   }
 }
