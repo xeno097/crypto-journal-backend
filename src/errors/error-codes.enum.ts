@@ -10,6 +10,7 @@ export enum ErrorCode {
   UNAUTHORIZED_USER = 'unauthorized-user',
   BLOCKED_USER = 'blocked-user',
   OPERATION_NOT_FOUND = 'operation-not-found',
+  TRANSACTION_NOT_FOUND = 'transaction-not-found',
 }
 
 registerEnumType(ErrorCode, {

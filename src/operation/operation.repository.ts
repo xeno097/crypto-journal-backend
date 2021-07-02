@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { BaseError } from 'src/errors/base-error.abstract-error';
 import { OperationNotFoundError } from 'src/errors/operation/operation-not-found.error';
 import { OperationEntity } from './database/operation.entity';
 import { CreateOperationDto } from './dtos/create-operation.dto';
@@ -30,7 +31,7 @@ export class OperationRepository {
 
   public async getOneEntity(
     getOneEntityDto: any,
-  ): Promise<[Error, OperationDto]> {
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const result = await this._getOneEntity(getOneEntityDto);
 

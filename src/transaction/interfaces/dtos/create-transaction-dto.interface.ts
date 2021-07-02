@@ -1,6 +1,6 @@
 import { OperationType } from 'src/operation/enums/operation-type.enum';
 
-export interface ITransactionEntity {
+export interface ICreateTransactionDto {
   coinSymbol: string;
   coins: number;
   fee: number;

@@ -21,9 +21,6 @@ export class TransactionEntity extends Document
   coins: number;
 
   @Prop({ required: true })
-  cost: number;
-
-  @Prop({ required: true })
   fee: number;
 
   @Prop({ required: true })
@@ -42,17 +39,29 @@ export class TransactionEntity extends Document
   operation: string;
 
   static toDto(input: TransactionEntity): TransactionDto {
+    const {
+      coinPrice,
+      coinSymbol,
+      coins,
+      date,
+      fee,
+      id,
+      operation,
+      operationType,
+      user,
+    } = input;
+
     return {
-      coinPrice: input.coinPrice,
-      coinSymbol: input.coinSymbol,
-      coins: input.coins,
-      cost: input.cost,
-      date: input.date,
-      fee: input.fee,
-      id: input.id,
-      operation: input.operation,
-      operationType: input.operationType,
-      user: input.user,
+      coinPrice,
+      coinSymbol,
+      coins,
+      cost: coinPrice * coins + fee,
+      date,
+      fee,
+      id,
+      operation,
+      operationType,
+      user,
     };
   }
 }

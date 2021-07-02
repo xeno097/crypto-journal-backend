@@ -1,6 +1,7 @@
 import { OperationType } from 'src/operation/enums/operation-type.enum';
+import { ICreateTransactionDto } from 'src/transaction/interfaces/dtos/create-transaction-dto.interface';
 
-export interface ITransactionEntity {
+export class CreateTransactionDto implements ICreateTransactionDto {
   coinSymbol: string;
   coins: number;
   fee: number;

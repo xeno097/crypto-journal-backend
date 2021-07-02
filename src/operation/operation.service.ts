@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { BaseError } from 'src/errors/base-error.abstract-error';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { CreateOperationDto } from './dtos/create-operation.dto';
 import { OperationDto } from './dtos/operation.dto';
@@ -11,7 +12,7 @@ export class OperationService {
 
   public async getOperationById(
     getOperationByIdDto: GetEntityByIdDto,
-  ): Promise<[Error, OperationDto]> {
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const res = await this.operationRepository.getOneEntity(
         getOperationByIdDto,
