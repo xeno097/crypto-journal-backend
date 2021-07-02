@@ -1,6 +1,6 @@
 import { OperationType } from 'src/operation/enums/operation-type.enum';
 
-export interface IUpdateOperationPayload {
+export interface IUpdateOperationPayloadType {
   name?: string;
   type?: OperationType;
 }
