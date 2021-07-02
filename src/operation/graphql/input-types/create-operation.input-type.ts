@@ -1,9 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { OperationType } from 'src/operation/enums/operation-type.enum';
-import { ICreateOperationInput } from 'src/operation/interfaces/input-types/create-operation-input-type.interface';
+import { ICreateOperationInputType } from 'src/operation/interfaces/input-types/create-operation-input-type.interface';
 
-@InputType()
-export class CreateOperationInput implements ICreateOperationInput {
+const CreateOperationInputTypeName = 'CreateOperationInput';
+
+@InputType(CreateOperationInputTypeName)
+export class CreateOperationInputType implements ICreateOperationInputType {
   @Field()
   name: string;
 

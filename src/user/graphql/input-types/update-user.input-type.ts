@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { GetObjectByIdInput } from 'src/shared/graphql/input-types/get-object-by-id.input-type';
-import { IUpdateEntityInput } from 'src/shared/interfaces/update-entity-input-type.interface';
+import { IUpdateEntityInputType } from 'src/shared/interfaces/update-entity-input-type.interface';
 import { UpdateUserPayloadInput } from './update-user.payload';
 
 @InputType()
-export class UpdateUserInput implements IUpdateEntityInput {
+export class UpdateUserInput implements IUpdateEntityInputType {
   @Field()
   where: GetObjectByIdInput;
 

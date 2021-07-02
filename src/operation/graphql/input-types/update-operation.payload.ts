@@ -1,9 +1,11 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { OperationType } from 'src/operation/enums/operation-type.enum';
-import { IUpdateOperationPayload } from 'src/operation/interfaces/input-types/update-operation-payload.interface';
+import { IUpdateOperationPayloadType } from 'src/operation/interfaces/input-types/update-operation-payload.interface';
 
-@InputType()
-export class UpdateOperationPayload implements IUpdateOperationPayload {
+const UpdateOperationPayloadTypeName = 'UpdateOperationPayload';
+
+@InputType(UpdateOperationPayloadTypeName)
+export class UpdateOperationPayloadType implements IUpdateOperationPayloadType {
   @Field({ nullable: true })
   name?: string;
 
