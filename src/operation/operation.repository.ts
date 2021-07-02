@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { OperationNotFoundError } from 'src/errors/operation/operation-not-found.error';
+import { BaseError } from 'src/errors/base-error.abstract-error';
+import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
 import { OperationEntity } from './database/operation.entity';
 import { CreateOperationDto } from './dtos/create-operation.dto';
 import { OperationDto } from './dtos/operation.dto';
@@ -14,12 +15,14 @@ export class OperationRepository {
     private readonly operationModel: Model<OperationEntity>,
   ) {}
 
-  private async _getOneEntity(getOneEntityDto: any): Promise<OperationEntity> {
+  private async _getOneEntity(
+    getOneEntityDto: Record<string, any>,
+  ): Promise<OperationEntity> {
     try {
       const entity = await this.operationModel.findOne(getOneEntityDto);
 
       if (!entity) {
-        throw new OperationNotFoundError();
+        throw new EntityNotFoundError('Operation');
       }
 
       return entity;
@@ -29,8 +32,8 @@ export class OperationRepository {
   }
 
   public async getOneEntity(
-    getOneEntityDto: any,
-  ): Promise<[Error, OperationDto]> {
+    getOneEntityDto: Record<string, any>,
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const result = await this._getOneEntity(getOneEntityDto);
 
@@ -40,7 +43,7 @@ export class OperationRepository {
     }
   }
 
-  public async getEntities(filter = {}): Promise<[Error, OperationDto[]]> {
+  public async getEntities(filter = {}): Promise<[BaseError, OperationDto[]]> {
     try {
       const res = await this.operationModel.find(filter);
 
@@ -55,7 +58,7 @@ export class OperationRepository {
     }
   }
 
-  public async countEntities(filter = {}): Promise<[Error, number]> {
+  public async countEntities(filter = {}): Promise<[BaseError, number]> {
     try {
       const res = await this.operationModel.find(filter).count();
 
@@ -65,7 +68,7 @@ export class OperationRepository {
     }
   }
 
-  public async aggregateEntities(pipeline: any[]): Promise<[Error, any]> {
+  public async aggregateEntities(pipeline: any[]): Promise<[BaseError, any]> {
     try {
       const result = await this.operationModel.aggregate(pipeline);
 
@@ -77,7 +80,7 @@ export class OperationRepository {
 
   public async createEntity(
     createEntityDto: CreateOperationDto,
-  ): Promise<[Error, OperationDto]> {
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const newEntity = new this.operationModel(createEntityDto);
 
@@ -91,31 +94,25 @@ export class OperationRepository {
 
   public async updateEntity(
     updateEntityDto: UpdateOperationDto,
-  ): Promise<[Error, OperationDto]> {
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const { getOneEntityDto, updateEntityPayload } = updateEntityDto;
 
-      const updatedEntity = await this.operationModel.findOneAndUpdate(
-        getOneEntityDto,
-        updateEntityPayload,
-        {
-          new: true,
-        },
-      );
+      const entityToUpdate = await this._getOneEntity(getOneEntityDto);
 
-      if (!updatedEntity) {
-        throw new OperationNotFoundError();
-      }
+      entityToUpdate.set(updateEntityPayload);
 
-      return [null, OperationEntity.toDto(updatedEntity)];
+      await entityToUpdate.save();
+
+      return [null, OperationEntity.toDto(entityToUpdate)];
     } catch (error) {
       return [error, null];
     }
   }
 
   public async deleteOneEntity(
-    getOneEntityDto: any,
-  ): Promise<[Error, OperationDto]> {
+    getOneEntityDto: Record<string, any>,
+  ): Promise<[BaseError, OperationDto]> {
     try {
       const deletedEntity = await this._getOneEntity(getOneEntityDto);
 
