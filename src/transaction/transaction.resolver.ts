@@ -16,6 +16,7 @@ import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-own-entity-by-id.dto';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
+import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { idFieldOptions } from 'src/user/graphql/options/id-input-field.options';
 import { AuthorizedCreateTransactionDto } from './dtos/create/authorized-create-transaction.dto';
@@ -42,7 +43,7 @@ export class TransactionResolver {
     const [err, res] = await this.transactionService.getTransactionById({ id });
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return res;
@@ -54,7 +55,7 @@ export class TransactionResolver {
     const [err, res] = await this.transactionService.getTransactions();
 
     if (err) {
-      return [err];
+      return [getError(err)];
     }
 
     return res;
@@ -75,7 +76,7 @@ export class TransactionResolver {
     );
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return res;
@@ -101,7 +102,7 @@ export class TransactionResolver {
     );
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return res;
@@ -119,7 +120,7 @@ export class TransactionResolver {
     );
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return op;
@@ -143,7 +144,7 @@ export class TransactionResolver {
     );
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return res;
@@ -183,7 +184,7 @@ export class TransactionResolver {
     );
 
     if (err) {
-      return err;
+      return getError(err);
     }
 
     return res;
