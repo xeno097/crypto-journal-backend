@@ -12,6 +12,7 @@ import { OperationModule } from './operation/operation.module';
 import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
 import { TransactionModule } from './transaction/transaction.module';
 import { CryptoCurrencyModule } from './crypto-currency/crypto-currency.module';
+import { CoinApiModule } from './coin-api/coin-api.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { CryptoCurrencyModule } from './crypto-currency/crypto-currency.module';
     OperationModule,
     TransactionModule,
     CryptoCurrencyModule,
+    CoinApiModule,
   ],
   controllers: [],
   providers: [GqlExceptionFilter],
