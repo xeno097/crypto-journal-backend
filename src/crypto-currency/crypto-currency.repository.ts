@@ -6,6 +6,7 @@ import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
 import { CryptoCurrencyEntity } from './database/crypto-currency.entity';
 import { CreateCryptoCurrencyDto } from './dtos/create-crypto-currency.dto';
 import { CryptoCurrencyDto } from './dtos/crypto-currency.dto';
+import { SearchCryptoCurrencyDto } from './dtos/search-crypto-currency.dto';
 import { UpdateCryptoCurrencyDto } from './dtos/update-crypto-currency.dto';
 
 @Injectable()
@@ -147,9 +148,9 @@ export class CryptoCurrencyRepository {
     return !!res;
   }
 
-  public async searchCryptoCurrency(input: {
-    searchString: string;
-  }): Promise<[BaseError, CryptoCurrencyDto[]]> {
+  public async searchCryptoCurrency(
+    input: SearchCryptoCurrencyDto,
+  ): Promise<[BaseError, CryptoCurrencyDto[]]> {
     const { searchString } = input;
 
     const filter = { $text: { $search: searchString } };

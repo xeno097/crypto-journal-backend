@@ -6,6 +6,7 @@ import { BaseError } from 'src/errors/base-error.abstract-error';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { CryptoCurrencyRepository } from './crypto-currency.repository';
 import { CryptoCurrencyDto } from './dtos/crypto-currency.dto';
+import { SearchCryptoCurrencyDto } from './dtos/search-crypto-currency.dto';
 import { UpdateCryptoCurrencyDto } from './dtos/update-crypto-currency.dto';
 import { IFormattedAsset } from './interfaces/formatted-asset.interface';
 
@@ -31,9 +32,9 @@ export class CryptoCurrencyService {
   }
 
   // EXTRA
-  public async searchCryptoCurrency(input: {
-    searchString: string;
-  }): Promise<[BaseError, CryptoCurrencyDto[]]> {
+  public async searchCryptoCurrency(
+    input: SearchCryptoCurrencyDto,
+  ): Promise<[BaseError, CryptoCurrencyDto[]]> {
     return await this.cryptoCurrencyRepository.searchCryptoCurrency(input);
   }
 
