@@ -1,10 +1,9 @@
-import { CreateCryptoCurrencyInput } from './create-crypto-currency.dto';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { IUpdateEntityDto } from 'src/shared/interfaces/update-entity-dto.interface';
+import { UpdateCryptoCurrencyPayload } from './update-crypto-currency-payload.dto';
 
-@InputType()
-export class UpdateCryptoCurrencyInput extends PartialType(
-  CreateCryptoCurrencyInput,
-) {
-  @Field(() => Int)
-  id: number;
+export class UpdateCryptoCurrencyDto implements IUpdateEntityDto {
+  getOneEntityDto: {
+    symbol: string;
+  };
+  updateEntityPayload: UpdateCryptoCurrencyPayload;
 }
