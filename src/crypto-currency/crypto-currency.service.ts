@@ -30,6 +30,13 @@ export class CryptoCurrencyService {
     return await this.cryptoCurrencyRepository.getEntities();
   }
 
+  // EXTRA
+  public async searchCryptoCurrency(input: {
+    searchString: string;
+  }): Promise<[BaseError, CryptoCurrencyDto[]]> {
+    return await this.cryptoCurrencyRepository.searchCryptoCurrency(input);
+  }
+
   public async updateCryptoCurrencyData(): Promise<[BaseError, boolean]> {
     const logger = new Logger('CryptoCurrencyService');
 

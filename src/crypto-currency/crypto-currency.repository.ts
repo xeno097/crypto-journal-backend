@@ -146,4 +146,14 @@ export class CryptoCurrencyRepository {
 
     return !!res;
   }
+
+  public async searchCryptoCurrency(input: {
+    searchString: string;
+  }): Promise<[BaseError, CryptoCurrencyDto[]]> {
+    const { searchString } = input;
+
+    const filter = { $text: { $search: searchString } };
+
+    return await this.getEntities(filter);
+  }
 }

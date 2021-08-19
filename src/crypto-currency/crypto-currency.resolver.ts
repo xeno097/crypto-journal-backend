@@ -26,6 +26,21 @@ export class CryptoCurrencyResolver {
   }
 
   @Query(() => [CryptoCurrencyResult])
+  public async searchCryptoCurrency(
+    @Args(FieldName.INPUT, idFieldOptions) input: string,
+  ): Promise<Array<typeof CryptoCurrencyResult>> {
+    const [err, res] = await this.cryptoCurrencyService.searchCryptoCurrency({
+      searchString: input,
+    });
+
+    if (err) {
+      return [getError(err)];
+    }
+
+    return res;
+  }
+
+  @Query(() => [CryptoCurrencyResult])
   public async getCryptoCurrencies(): Promise<
     Array<typeof CryptoCurrencyResult>
   > {
