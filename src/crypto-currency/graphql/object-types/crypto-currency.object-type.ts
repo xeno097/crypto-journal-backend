@@ -1,13 +1,15 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ICryptoCurrencyDto } from 'src/crypto-currency/interfaces/crypto-currency-dto.interface';
-import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
 
 export const cryptoCurrencyTypeName = 'CryptoCurrency';
 
 @ObjectType(cryptoCurrencyTypeName)
-export class CryptoCurrencyType implements ICryptoCurrencyDto, IBaseEntity {
+export class CryptoCurrencyType implements ICryptoCurrencyDto {
   @Field()
   id: string;
+
+  @Field()
+  name: string;
 
   @Field()
   symbol: string;
@@ -17,4 +19,6 @@ export class CryptoCurrencyType implements ICryptoCurrencyDto, IBaseEntity {
 
   @Field({ nullable: true })
   icon?: string;
+
+  lastUpdated: number;
 }
