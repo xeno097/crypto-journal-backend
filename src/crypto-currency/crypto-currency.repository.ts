@@ -22,7 +22,7 @@ export class CryptoCurrencyRepository {
       const entity = await this.cryptoCurrencyModel.findOne(getOneEntityDto);
 
       if (!entity) {
-        throw new EntityNotFoundError('Operation');
+        throw new EntityNotFoundError('CryptoCurrency');
       }
 
       return entity;
