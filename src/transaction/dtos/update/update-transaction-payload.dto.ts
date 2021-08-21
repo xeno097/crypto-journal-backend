@@ -10,4 +10,5 @@ export class UpdateTransactionPayloadDto
   date?: string;
   operationType?: OperationType;
   operation?: string;
+  cryptoCurrency?: string;
 }

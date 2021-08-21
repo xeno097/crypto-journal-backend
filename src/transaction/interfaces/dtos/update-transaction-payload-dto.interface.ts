@@ -8,4 +8,5 @@ export interface IUpdateTransactionPayoadDto {
   date?: string;
   operationType?: OperationType;
   operation?: string;
+  cryptoCurrency?: string;
 }

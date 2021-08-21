@@ -1,10 +1,11 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { ICreateTransactionInputType } from 'src/transaction/interfaces/input-types/create-transaction-input-type.interface';
+import { OperationType } from 'src/operation/enums/operation-type.enum';
+import { ICreateTransactionDto } from 'src/transaction/interfaces/dtos/create-transaction-dto.interface';
 
 const CreateTransactionInputTypeName = 'CreateTransactionInput';
 
 @InputType(CreateTransactionInputTypeName)
-export class CreateTransactionInputType implements ICreateTransactionInputType {
+export class CreateTransactionInputType implements ICreateTransactionDto {
   @Field()
   coinSymbol: string;
 
@@ -22,4 +23,7 @@ export class CreateTransactionInputType implements ICreateTransactionInputType {
 
   @Field(() => ID)
   operation: string;
+
+  operationType: OperationType;
+  user: string;
 }
