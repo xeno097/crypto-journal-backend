@@ -1,3 +1,4 @@
+import { ICryptoCurrencyDto } from 'src/crypto-currency/interfaces/crypto-currency-dto.interface';
 import { OperationType } from 'src/operation/enums/operation-type.enum';
 
 export interface ITransactionDto {
@@ -11,4 +12,5 @@ export interface ITransactionDto {
   operationType: OperationType;
   user: string;
   operation: string;
+  cryptoCurrency: ICryptoCurrencyDto;
 }
