@@ -1,22 +1,28 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args } from '@nestjs/graphql';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
+import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
 import { CryptoCurrencyService } from './crypto-currency.service';
+import { CryptoCurrencyType } from './graphql/object-types/crypto-currency.object-type';
 import { CryptoCurrencyResult } from './graphql/union-types/crypto-currency-result.union-type';
 
-@Resolver()
+@Resolver(() => CryptoCurrencyType)
+@UseGuards(GqlAuthGuard)
 export class CryptoCurrencyResolver {
   constructor(private readonly cryptoCurrencyService: CryptoCurrencyService) {}
 
   @Query(() => CryptoCurrencyResult)
-  public async getCryptoCurrencyById(
-    @Args(FieldName.ID, idFieldOptions) id: string,
+  public async getCryptoCurrencyBySymbol(
+    @Args(FieldName.INPUT, idFieldOptions) symbol: string,
   ): Promise<typeof CryptoCurrencyResult> {
     const [
       err,
       res,
-    ] = await this.cryptoCurrencyService.getOneCryptoCurrencyById({ id });
+    ] = await this.cryptoCurrencyService.getOneCryptoCurrencyBySymbol({
+      symbol,
+    });
 
     if (err) {
       return getError(err);

@@ -3,9 +3,9 @@ import { CoinApiRepository } from 'src/coin-api/coin-api.repository';
 import { IAssetData } from 'src/coin-api/interfaces/asset-data.interface';
 import { IAssetIcon } from 'src/coin-api/interfaces/asset-icon.interface';
 import { BaseError } from 'src/errors/base-error.abstract-error';
-import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
 import { CryptoCurrencyRepository } from './crypto-currency.repository';
 import { CryptoCurrencyDto } from './dtos/crypto-currency.dto';
+import { GetCryptoCurrencyBySymbolDto } from './dtos/get-crypto-currency-by-symbol.dto';
 import { SearchCryptoCurrencyDto } from './dtos/search-crypto-currency.dto';
 import { UpdateCryptoCurrencyDto } from './dtos/update-crypto-currency.dto';
 import { IFormattedAsset } from './interfaces/formatted-asset.interface';
@@ -17,7 +17,9 @@ export class CryptoCurrencyService {
     private readonly coinApiRepository: CoinApiRepository,
   ) {}
 
-  public async getOneCryptoCurrencyById(getOneEntityDto: GetEntityByIdDto) {
+  public async getOneCryptoCurrencyBySymbol(
+    getOneEntityDto: GetCryptoCurrencyBySymbolDto,
+  ) {
     await this.updateCryptoCurrencyData();
 
     return await this.cryptoCurrencyRepository.getOneEntity(getOneEntityDto);
