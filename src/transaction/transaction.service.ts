@@ -9,12 +9,14 @@ import { TransactionDto } from './dtos/transaction.dto';
 import { UpdateTransactionDto } from './dtos/update/update-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
+import { CryptoCurrencyRepository } from 'src/crypto-currency/crypto-currency.repository';
 
 @Injectable()
 export class TransactionService {
   constructor(
     private readonly operationRepository: OperationRepository,
     private readonly transactionRepository: TransactionRepository,
+    private readonly cryptoCurrencyRepository: CryptoCurrencyRepository,
   ) {}
 
   public async getTransactionById(
@@ -40,20 +42,32 @@ export class TransactionService {
   ): Promise<[BaseError, TransactionDto]> {
     const { jwtPayloadDto, operationDto } = authorizedCreateTransactionDto;
     const { id } = jwtPayloadDto;
-    const { operation } = operationDto;
+    const { operation, coinSymbol } = operationDto;
 
-    const [err, op] = await this.operationRepository.getOneEntity({
+    const [opErr, op] = await this.operationRepository.getOneEntity({
       id: operation,
     });
 
-    if (err) {
-      return [err, null];
+    if (opErr) {
+      return [opErr, null];
+    }
+
+    const [
+      cryptoErr,
+      cryptoCurrency,
+    ] = await this.cryptoCurrencyRepository.getOneEntity({
+      symbol: coinSymbol,
+    });
+
+    if (cryptoErr) {
+      return [opErr, null];
     }
 
     const createTransactionDto: CreateTransactionDto = {
       ...operationDto,
       operationType: op.type,
       user: id,
+      cryptoCurrency: cryptoCurrency.id,
     };
 
     const res = await this.transactionRepository.createEntity(

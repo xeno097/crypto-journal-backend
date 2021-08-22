@@ -1,16 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema } from 'mongoose';
+import { CryptoCurrencyEntity } from 'src/crypto-currency/database/crypto-currency.entity';
 import { OperationType } from 'src/operation/enums/operation-type.enum';
-import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
 import { TransactionDto } from '../dtos/transaction.dto';
-import { ITransactionEntity } from '../interfaces/entities/transaction-entity.interface';
+import { ITransactionDto } from '../interfaces/dtos/transaction-dto.interface';
 
 @Schema({
   collection: 'transaction',
   timestamps: true,
 })
-export class TransactionEntity extends Document
-  implements ITransactionEntity, IBaseEntity {
+export class TransactionEntity extends Document implements ITransactionDto {
   @Prop({ required: true })
   id: string;
 
@@ -35,13 +34,21 @@ export class TransactionEntity extends Document
   @Prop({ required: true, type: MongoSchema.Types.ObjectId })
   user: string;
 
+  @Prop({
+    type: MongoSchema.Types.ObjectId,
+    ref: CryptoCurrencyEntity.name,
+    required: true,
+  })
+  cryptoCurrency: CryptoCurrencyEntity;
+
   @Prop({ required: true, type: MongoSchema.Types.ObjectId })
   operation: string;
+
+  cost: number;
 
   static toDto(input: TransactionEntity): TransactionDto {
     const {
       coinPrice,
-      coinSymbol,
       coins,
       date,
       fee,
@@ -53,7 +60,7 @@ export class TransactionEntity extends Document
 
     return {
       coinPrice,
-      coinSymbol,
+      coinSymbol: input.cryptoCurrency.symbol,
       coins,
       cost: coinPrice * coins + fee,
       date,
@@ -62,6 +69,7 @@ export class TransactionEntity extends Document
       operation,
       operationType,
       user,
+      cryptoCurrency: CryptoCurrencyEntity.toDto(input.cryptoCurrency),
     };
   }
 }
@@ -69,6 +77,12 @@ export class TransactionEntity extends Document
 export const TransactionEntitySchema = SchemaFactory.createForClass(
   TransactionEntity,
 );
+
+TransactionEntitySchema.pre(/^find/, function(next) {
+  this.populate({ path: 'cryptoCurrency' });
+
+  next();
+});
 
 TransactionEntitySchema.pre('validate', function(next) {
   if (this.isNew) {

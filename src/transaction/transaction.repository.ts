@@ -70,9 +70,11 @@ export class TransactionRepository {
     }
   }
 
-  public async aggregateEntities(pipeline: any[]): Promise<[BaseError, any]> {
+  public async aggregateEntities<T>(
+    pipeline: any[],
+  ): Promise<[BaseError, T[]]> {
     try {
-      const result = await this.userModel.aggregate(pipeline);
+      const result = await this.userModel.aggregate<T>(pipeline);
 
       return [null, result];
     } catch (error) {
@@ -87,6 +89,8 @@ export class TransactionRepository {
       const newEntity = new this.userModel(createEntityDto);
 
       await newEntity.save();
+
+      await newEntity.populate({ path: 'cryptoCurrency' }).execPopulate();
 
       return [null, TransactionEntity.toDto(newEntity)];
     } catch (error) {
@@ -105,6 +109,8 @@ export class TransactionRepository {
       entityToUpdate.set(updateEntityPayload);
 
       await entityToUpdate.save();
+
+      await entityToUpdate.populate({ path: 'cryptoCurrency' }).execPopulate();
 
       return [null, TransactionEntity.toDto(entityToUpdate)];
     } catch (error) {

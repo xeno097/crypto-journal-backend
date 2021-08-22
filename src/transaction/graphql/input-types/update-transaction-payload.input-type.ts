@@ -1,11 +1,11 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IUpdateTransactionPayloadInputType } from 'src/transaction/interfaces/input-types/update-transaction-payload-input-type.interface';
+import { IUpdateTransactionPayoadDto } from 'src/transaction/interfaces/dtos/update-transaction-payload-dto.interface';
 
 const UpdateTransactionPayloadInputTypeName = 'UpdateTransactionPayload';
 
 @InputType(UpdateTransactionPayloadInputTypeName)
 export class UpdateTransactionPayloadInputType
-  implements IUpdateTransactionPayloadInputType {
+  implements IUpdateTransactionPayoadDto {
   @Field({ nullable: true })
   coinSymbol?: string;
 
@@ -23,4 +23,7 @@ export class UpdateTransactionPayloadInputType
 
   @Field(() => ID, { nullable: true })
   operation?: string;
+
+  @Field(() => ID, { nullable: true })
+  cryptoCurrency?: string;
 }
