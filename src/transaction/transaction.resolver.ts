@@ -161,7 +161,7 @@ export class TransactionResolver {
     });
 
     if (err) {
-      return [err];
+      return [getError(err)];
     }
 
     return res;
