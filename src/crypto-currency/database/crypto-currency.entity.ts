@@ -3,8 +3,10 @@ import { CryptoCurrencyDto } from '../dtos/crypto-currency.dto';
 import { ICryptoCurrencyDto } from '../interfaces/crypto-currency-dto.interface';
 import { Document } from 'mongoose';
 
+export const cryptoCurrencyCollectionName = 'crypto_currency';
+
 @Schema({
-  collection: 'crypto_currency',
+  collection: cryptoCurrencyCollectionName,
   timestamps: true,
 })
 export class CryptoCurrencyEntity extends Document
