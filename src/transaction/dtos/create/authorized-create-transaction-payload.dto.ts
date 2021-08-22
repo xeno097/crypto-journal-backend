@@ -1,7 +1,4 @@
-import { IAuthorizedCreateTransactionPayloadDto } from '../../interfaces/dtos/authorized-create-transaction-payload-dto.interface';
-
-export class AuthorizedCreateTransactionPayloadDto
-  implements IAuthorizedCreateTransactionPayloadDto {
+export class AuthorizedCreateTransactionPayloadDto {
   coinSymbol: string;
   coins: number;
   fee: number;
