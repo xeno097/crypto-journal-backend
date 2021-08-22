@@ -28,3 +28,5 @@ jobs:
           HD_REFRESH_TOKEN_SECRET: ${{secrets.REFRESH_TOKEN_SECRET}}
           HD_REFRESH_TOKEN_EXP: ${{secrets.REFRESH_TOKEN_EXP}}
           HD_GOOGLE_SERVICE_ACCOUNT: ${{secrets.GOOGLE_SERVICE_ACCOUNT}}
+          HD_COIN_API_BASE_URL: ${{secrets.COIN_API_BASE_URL}}
+          HD_COIN_API_KEY: ${{secrets.COIN_API_KEY}}
