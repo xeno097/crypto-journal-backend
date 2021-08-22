@@ -22,5 +22,6 @@ import { CryptoCurrencyModule } from 'src/crypto-currency/crypto-currency.module
     CryptoCurrencyModule,
   ],
   providers: [TransactionResolver, TransactionService, TransactionRepository],
+  exports: [TransactionRepository],
 })
 export class TransactionModule {}

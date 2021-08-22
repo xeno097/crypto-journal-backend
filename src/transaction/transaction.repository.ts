@@ -70,9 +70,11 @@ export class TransactionRepository {
     }
   }
 
-  public async aggregateEntities(pipeline: any[]): Promise<[BaseError, any]> {
+  public async aggregateEntities<T>(
+    pipeline: any[],
+  ): Promise<[BaseError, T[]]> {
     try {
-      const result = await this.userModel.aggregate(pipeline);
+      const result = await this.userModel.aggregate<T>(pipeline);
 
       return [null, result];
     } catch (error) {
