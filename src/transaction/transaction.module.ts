@@ -8,6 +8,7 @@ import {
   TransactionEntitySchema,
 } from './database/transaction.entity';
 import { OperationModule } from 'src/operation/operation.module';
+import { CryptoCurrencyModule } from 'src/crypto-currency/crypto-currency.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { OperationModule } from 'src/operation/operation.module';
         schema: TransactionEntitySchema,
       },
     ]),
+    CryptoCurrencyModule,
   ],
   providers: [TransactionResolver, TransactionService, TransactionRepository],
 })

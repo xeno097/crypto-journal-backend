@@ -24,5 +24,6 @@ import { CoinApiModule } from 'src/coin-api/coin-api.module';
     CryptoCurrencyService,
     CryptoCurrencyRepository,
   ],
+  exports: [CryptoCurrencyRepository],
 })
 export class CryptoCurrencyModule {}

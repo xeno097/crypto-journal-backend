@@ -1,11 +1,14 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { CryptoCurrencyType } from 'src/crypto-currency/graphql/object-types/crypto-currency.object-type';
+import { CryptoCurrencyResult } from 'src/crypto-currency/graphql/union-types/crypto-currency-result.union-type';
+import { OperationType } from 'src/operation/enums/operation-type.enum';
 import { OperationResult } from 'src/operation/graphql/union-types/operation-result.union-type';
-import { ITransactionType } from 'src/transaction/interfaces/object-types/transaction-object-type.interface';
+import { ITransactionDto } from 'src/transaction/interfaces/dtos/transaction-dto.interface';
 
 export const transactionTypeName = 'Transaction';
 
 @ObjectType(transactionTypeName)
-export class TransactionType implements ITransactionType {
+export class TransactionType implements ITransactionDto {
   @Field(() => ID)
   id: string;
 
@@ -29,4 +32,11 @@ export class TransactionType implements ITransactionType {
 
   @Field(() => OperationResult)
   operation: string;
+
+  @Field(() => CryptoCurrencyResult)
+  cryptoCurrency: CryptoCurrencyType;
+
+  user: string;
+
+  operationType: OperationType;
 }

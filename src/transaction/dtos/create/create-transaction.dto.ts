@@ -10,4 +10,5 @@ export class CreateTransactionDto implements ICreateTransactionDto {
   operationType: OperationType;
   user: string;
   operation: string;
+  cryptoCurrency: string;
 }

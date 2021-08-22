@@ -88,6 +88,8 @@ export class TransactionRepository {
 
       await newEntity.save();
 
+      await newEntity.populate({ path: 'cryptoCurrency' }).execPopulate();
+
       return [null, TransactionEntity.toDto(newEntity)];
     } catch (error) {
       return [error, null];
@@ -105,6 +107,8 @@ export class TransactionRepository {
       entityToUpdate.set(updateEntityPayload);
 
       await entityToUpdate.save();
+
+      await entityToUpdate.populate({ path: 'cryptoCurrency' }).execPopulate();
 
       return [null, TransactionEntity.toDto(entityToUpdate)];
     } catch (error) {
