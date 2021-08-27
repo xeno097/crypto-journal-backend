@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
 import { BaseError } from 'src/errors/base-error.abstract-error';
 import { TransactionRepository } from 'src/transaction/transaction.repository';
-import { balanceAggregationPipeline } from './database/balance-aggregation-pipeline';
+import {
+  balanceAggregationPipeline,
+  BALANCE_DEFAULT_CRYPTO_CURRENCY,
+} from './database/balance-aggregation-pipeline';
 import { holdingAggregationPipeline } from './database/holding-aggregation-pipeline';
 import { BalanceDto } from './dtos/balance.dto';
 import { HoldingDto } from './dtos/holding.dto';
@@ -28,7 +31,14 @@ export class HoldingService {
 
     const [res] = balance;
 
-    const ret: BalanceDto = res ?? { balance: 0 };
+    const defaultBalance: BalanceDto = {
+      id: BALANCE_DEFAULT_CRYPTO_CURRENCY,
+      cryptoValue: 0,
+      balance: 0,
+      cryptoCurrency: BALANCE_DEFAULT_CRYPTO_CURRENCY,
+    };
+
+    const ret: BalanceDto = res ?? defaultBalance;
 
     return [null, ret];
   }
