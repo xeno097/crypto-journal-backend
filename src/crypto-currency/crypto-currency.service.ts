@@ -20,16 +20,12 @@ export class CryptoCurrencyService {
   public async getOneCryptoCurrencyBySymbol(
     getOneEntityDto: GetCryptoCurrencyBySymbolDto,
   ) {
-    await this.updateCryptoCurrencyData();
-
     return await this.cryptoCurrencyRepository.getOneEntity(getOneEntityDto);
   }
 
   public async getAllCryptoCurrencies(): Promise<
     [BaseError, CryptoCurrencyDto[]]
   > {
-    await this.updateCryptoCurrencyData();
-
     return await this.cryptoCurrencyRepository.getEntities();
   }
 
