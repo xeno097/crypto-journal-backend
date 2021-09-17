@@ -88,8 +88,8 @@ export const holdingAggregationPipeline = (userId: string) => [
   },
   {
     $sort: {
-      value: 1,
-      holding: 1,
+      value: -1,
+      holding: -1,
     },
   },
 ];
