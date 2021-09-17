@@ -2,18 +2,17 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
-import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
-import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-ctx.util';
-import { EnvKey } from './shared/enums/env-keys.enum';
-import { CommonJwtModule } from './common-jwt/common-jwt.module';
-import { OperationModule } from './operation/operation.module';
-import { GqlExceptionFilter } from './shared/filters/graphql-exception.filter';
-import { TransactionModule } from './transaction/transaction.module';
-import { CryptoCurrencyModule } from './crypto-currency/crypto-currency.module';
 import { CoinApiModule } from './coin-api/coin-api.module';
+import { CommonJwtModule } from './common-jwt/common-jwt.module';
+import { CryptoCurrencyModule } from './crypto-currency/crypto-currency.module';
+import { EmailModule } from './email/email.module';
 import { HoldingModule } from './holding/holding.module';
+import { OperationModule } from './operation/operation.module';
+import { EnvKey } from './shared/enums/env-keys.enum';
+import { formatExpressGraphqlCtx } from './shared/graphql/utils/format-graphql-ctx.util';
+import { TransactionModule } from './transaction/transaction.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -49,6 +48,6 @@ import { HoldingModule } from './holding/holding.module';
     HoldingModule,
   ],
   controllers: [],
-  providers: [GqlExceptionFilter],
+  providers: [],
 })
 export class AppModule {}

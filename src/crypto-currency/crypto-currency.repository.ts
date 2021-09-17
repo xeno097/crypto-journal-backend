@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseError } from 'src/errors/base-error.abstract-error';
 import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
+import { buildFilterQuery } from 'src/shared/database/build-filter-query.util';
+import { FilterDto } from 'src/shared/dtos/filter.dto';
 import { CryptoCurrencyEntity } from './database/crypto-currency.entity';
 import { CreateCryptoCurrencyDto } from './dtos/create-crypto-currency.dto';
 import { CryptoCurrencyDto } from './dtos/crypto-currency.dto';
@@ -45,10 +47,12 @@ export class CryptoCurrencyRepository {
   }
 
   public async getEntities(
-    filter = {},
+    filter: FilterDto,
   ): Promise<[BaseError, CryptoCurrencyDto[]]> {
     try {
-      const res = await this.cryptoCurrencyModel.find(filter);
+      const query = this.cryptoCurrencyModel.find().sort({ price: -1 });
+
+      const res = await buildFilterQuery(query, filter);
 
       return [
         null,
@@ -153,7 +157,9 @@ export class CryptoCurrencyRepository {
   ): Promise<[BaseError, CryptoCurrencyDto[]]> {
     const { searchString } = input;
 
-    const filter = { $text: { $search: searchString } };
+    const filter: FilterDto = {
+      where: { $text: { $search: searchString } },
+    };
 
     return await this.getEntities(filter);
   }

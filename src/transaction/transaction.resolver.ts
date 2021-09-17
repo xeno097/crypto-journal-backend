@@ -13,12 +13,13 @@ import { OperationService } from 'src/operation/operation.service';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { GqlJwtPayload } from 'src/shared/decorators/jwt-payload.decorator';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
-import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-self-entity-by-id.dto';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
+import { FilterInputType } from 'src/shared/graphql/input-types/filter-input.input-type';
+import { filterInputFieldOptions } from 'src/shared/graphql/options/filter-input-field.options';
+import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
-import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { AuthorizedCreateTransactionDto } from './dtos/create/authorized-create-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { CreateTransactionInputType } from './graphql/input-types/create-transaction.input-type';
@@ -51,8 +52,13 @@ export class TransactionResolver {
 
   @Query(() => [TransactionResult])
   @AuthorizedRoles(UserRoles.ADMIN)
-  public async getTransactions(): Promise<Array<typeof TransactionResult>> {
-    const [err, res] = await this.transactionService.getTransactions();
+  public async getTransactions(
+    @Args(FieldName.INPUT, filterInputFieldOptions)
+    filterInput: FilterInputType,
+  ): Promise<Array<typeof TransactionResult>> {
+    const [err, res] = await this.transactionService.getTransactions(
+      filterInput,
+    );
 
     if (err) {
       return [getError(err)];
@@ -132,15 +138,9 @@ export class TransactionResolver {
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof TransactionResult> {
-    const { id: user } = jwtPayloadDto;
-
-    const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
-      id,
-      user,
-    };
-
-    const [err, res] = await this.transactionService.getTransactionById(
-      getSelfTransactionByIdDto,
+    const [err, res] = await this.transactionService.getSelfTransactionById(
+      { id },
+      jwtPayloadDto,
     );
 
     if (err) {
@@ -153,12 +153,13 @@ export class TransactionResolver {
   @Query(() => [TransactionResult])
   public async getSelfTransactions(
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
+    @Args(FieldName.INPUT, filterInputFieldOptions)
+    filterInput: FilterInputType,
   ): Promise<Array<typeof TransactionResult>> {
-    const { id } = jwtPayloadDto;
-
-    const [err, res] = await this.transactionService.getTransactions({
-      user: id,
-    });
+    const [err, res] = await this.transactionService.getSelfTransactions(
+      filterInput,
+      jwtPayloadDto,
+    );
 
     if (err) {
       return [getError(err)];
@@ -172,15 +173,9 @@ export class TransactionResolver {
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof TransactionResult> {
-    const { id: user } = jwtPayloadDto;
-
-    const deleteTransactionDto: GetSelfEntityByIdDto = {
-      id,
-      user,
-    };
-
     const [err, res] = await this.transactionService.deleteSelfTransactionById(
-      deleteTransactionDto,
+      { id },
+      jwtPayloadDto,
     );
 
     if (err) {

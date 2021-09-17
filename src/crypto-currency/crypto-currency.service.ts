@@ -3,6 +3,7 @@ import { CoinApiRepository } from 'src/coin-api/coin-api.repository';
 import { IAssetData } from 'src/coin-api/interfaces/asset-data.interface';
 import { IAssetIcon } from 'src/coin-api/interfaces/asset-icon.interface';
 import { BaseError } from 'src/errors/base-error.abstract-error';
+import { FilterDto } from 'src/shared/dtos/filter.dto';
 import { CryptoCurrencyRepository } from './crypto-currency.repository';
 import { CryptoCurrencyDto } from './dtos/crypto-currency.dto';
 import { GetCryptoCurrencyBySymbolDto } from './dtos/get-crypto-currency-by-symbol.dto';
@@ -20,17 +21,13 @@ export class CryptoCurrencyService {
   public async getOneCryptoCurrencyBySymbol(
     getOneEntityDto: GetCryptoCurrencyBySymbolDto,
   ) {
-    await this.updateCryptoCurrencyData();
-
     return await this.cryptoCurrencyRepository.getOneEntity(getOneEntityDto);
   }
 
-  public async getAllCryptoCurrencies(): Promise<
-    [BaseError, CryptoCurrencyDto[]]
-  > {
-    await this.updateCryptoCurrencyData();
-
-    return await this.cryptoCurrencyRepository.getEntities();
+  public async getCryptoCurrencies(
+    filter: FilterDto,
+  ): Promise<[BaseError, CryptoCurrencyDto[]]> {
+    return await this.cryptoCurrencyRepository.getEntities(filter);
   }
 
   // EXTRA
@@ -58,7 +55,7 @@ export class CryptoCurrencyService {
       return [null, true];
     }
 
-    const [getCryptoErr, assets] = await this.getCryptoCurrencies();
+    const [getCryptoErr, assets] = await this._getCryptoCurrencies();
 
     if (getCryptoErr) {
       return [getCryptoErr, null];
@@ -85,7 +82,9 @@ export class CryptoCurrencyService {
     return [null, res];
   }
 
-  private async getCryptoCurrencies(): Promise<[BaseError, IFormattedAsset[]]> {
+  private async _getCryptoCurrencies(): Promise<
+    [BaseError, IFormattedAsset[]]
+  > {
     try {
       const { data: icons } = await this.coinApiRepository.getAssetsIcons();
       const { data: assets } = await this.coinApiRepository.getAssets();
