@@ -1,10 +1,8 @@
-import { ArgumentsHost } from '@nestjs/common';
-import { Catch, ExceptionFilter, Provider } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import { GqlContextType } from '@nestjs/graphql';
+import { Response } from 'express';
 import { GraphQLType } from 'graphql';
 import { getError } from '../graphql/utils/get-graphql-error.util';
-import { Response } from 'express';
-import { GqlContextType } from '@nestjs/graphql';
 
 @Catch()
 export class GraphqlExceptionFilter implements ExceptionFilter {
@@ -35,11 +33,6 @@ export class GraphqlExceptionFilter implements ExceptionFilter {
     return getError(exception);
   }
 }
-
-export const GqlExceptionFilter: Provider = {
-  provide: APP_FILTER,
-  useClass: GraphqlExceptionFilter,
-};
 
 const isGraphQLListType = (type: string): boolean => {
   // Regex to match any string between []
