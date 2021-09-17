@@ -143,8 +143,17 @@ export class TransactionService {
   }
 
   public async getSelfTransactionById(
-    getSelfTransactionByIdDto: GetSelfEntityByIdDto,
+    getTransactionByIdDto: GetEntityByIdDto,
+    jwtPayloadDto: JwtPayloadDto,
   ): Promise<[BaseError, TransactionDto]> {
+    const { id } = getTransactionByIdDto;
+    const { id: user } = jwtPayloadDto;
+
+    const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
+      id,
+      user,
+    };
+
     const res = await this.transactionRepository.getOneEntity(
       getSelfTransactionByIdDto,
     );
@@ -167,10 +176,19 @@ export class TransactionService {
   }
 
   public async deleteSelfTransactionById(
-    getSelfTransactionByIdDto: GetSelfEntityByIdDto,
+    getTransactionByIdDto: GetEntityByIdDto,
+    jwtPayloadDto: JwtPayloadDto,
   ): Promise<[BaseError, TransactionDto]> {
+    const { id } = getTransactionByIdDto;
+    const { id: user } = jwtPayloadDto;
+
+    const deleteTransactionDto: GetSelfEntityByIdDto = {
+      id,
+      user,
+    };
+
     const res = await this.transactionRepository.deleteOneEntity(
-      getSelfTransactionByIdDto,
+      deleteTransactionDto,
     );
 
     return res;

@@ -139,15 +139,9 @@ export class TransactionResolver {
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof TransactionResult> {
-    const { id: user } = jwtPayloadDto;
-
-    const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
-      id,
-      user,
-    };
-
-    const [err, res] = await this.transactionService.getTransactionById(
-      getSelfTransactionByIdDto,
+    const [err, res] = await this.transactionService.getSelfTransactionById(
+      { id },
+      jwtPayloadDto,
     );
 
     if (err) {
@@ -180,15 +174,9 @@ export class TransactionResolver {
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
     @Args(FieldName.ID, idFieldOptions) id: string,
   ): Promise<typeof TransactionResult> {
-    const { id: user } = jwtPayloadDto;
-
-    const deleteTransactionDto: GetSelfEntityByIdDto = {
-      id,
-      user,
-    };
-
     const [err, res] = await this.transactionService.deleteSelfTransactionById(
-      deleteTransactionDto,
+      { id },
+      jwtPayloadDto,
     );
 
     if (err) {
