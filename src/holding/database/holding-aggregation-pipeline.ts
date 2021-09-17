@@ -86,4 +86,10 @@ export const holdingAggregationPipeline = (userId: string) => [
       price: '$cryptoCurrency.price',
     },
   },
+  {
+    $sort: {
+      value: 1,
+      holding: 1,
+    },
+  },
 ];
