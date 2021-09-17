@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { BaseError } from 'src/errors/base-error.abstract-error';
 import { EntityNotFoundError } from 'src/errors/shared/entity-not-found.error';
+import { buildFilterQuery } from 'src/shared/database/build-filter-query.util';
 import { FilterDto } from 'src/shared/dtos/filter.dto';
 import { TransactionEntity } from './database/transaction.entity';
 import { CreateTransactionDto } from './dtos/create/create-transaction.dto';
@@ -48,19 +49,9 @@ export class TransactionRepository {
     filter: FilterDto,
   ): Promise<[BaseError, TransactionDto[]]> {
     try {
-      const { start, limit, where } = filter;
+      const query = this.userModel.find().sort({ date: -1 });
 
-      const query = this.userModel.find(where).sort({ date: -1 });
-
-      if (start) {
-        query.skip(start);
-      }
-
-      if (limit) {
-        query.limit(limit);
-      }
-
-      const res = await query;
+      const res = await buildFilterQuery(query, filter);
 
       return [
         null,

@@ -13,12 +13,13 @@ import { OperationService } from 'src/operation/operation.service';
 import { AuthorizedRoles } from 'src/shared/decorators/authorized-roles.decorator';
 import { GqlJwtPayload } from 'src/shared/decorators/jwt-payload.decorator';
 import { GetEntityByIdDto } from 'src/shared/dtos/get-entity-by-id.dto';
-import { GetSelfEntityByIdDto } from 'src/shared/dtos/get-self-entity-by-id.dto';
 import { FieldName } from 'src/shared/enums/input-fields.enum';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
+import { FilterInputType } from 'src/shared/graphql/input-types/filter-input.input-type';
+import { filterInputFieldOptions } from 'src/shared/graphql/options/filter-input-field.options';
+import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { getError } from 'src/shared/graphql/utils/get-graphql-error.util';
 import { GqlAuthGuard } from 'src/shared/guards/gql-auth.guard';
-import { idFieldOptions } from 'src/shared/graphql/options/id-input-field.options';
 import { AuthorizedCreateTransactionDto } from './dtos/create/authorized-create-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { CreateTransactionInputType } from './graphql/input-types/create-transaction.input-type';
@@ -26,8 +27,6 @@ import { UpdateTransactionInputType } from './graphql/input-types/update-transac
 import { TransactionType } from './graphql/object-types/transaction.object-type';
 import { TransactionResult } from './graphql/union-types/transaction-result.union-type';
 import { TransactionService } from './transaction.service';
-import { FilterInputType } from 'src/shared/graphql/input-types/filter-input.input-type';
-import { filterInputFieldOptions } from 'src/shared/graphql/options/filter-input-field.options';
 
 @Resolver(() => TransactionType)
 @UseGuards(GqlAuthGuard)
