@@ -26,6 +26,8 @@ import { UpdateTransactionInputType } from './graphql/input-types/update-transac
 import { TransactionType } from './graphql/object-types/transaction.object-type';
 import { TransactionResult } from './graphql/union-types/transaction-result.union-type';
 import { TransactionService } from './transaction.service';
+import { FilterInputType } from 'src/shared/graphql/input-types/filter-input.input-type';
+import { filterInputFieldOptions } from 'src/shared/graphql/options/filter-input-field.options';
 
 @Resolver(() => TransactionType)
 @UseGuards(GqlAuthGuard)
@@ -51,8 +53,13 @@ export class TransactionResolver {
 
   @Query(() => [TransactionResult])
   @AuthorizedRoles(UserRoles.ADMIN)
-  public async getTransactions(): Promise<Array<typeof TransactionResult>> {
-    const [err, res] = await this.transactionService.getTransactions();
+  public async getTransactions(
+    @Args(FieldName.INPUT, filterInputFieldOptions)
+    filterInput: FilterInputType,
+  ): Promise<Array<typeof TransactionResult>> {
+    const [err, res] = await this.transactionService.getTransactions(
+      filterInput,
+    );
 
     if (err) {
       return [getError(err)];
@@ -153,12 +160,13 @@ export class TransactionResolver {
   @Query(() => [TransactionResult])
   public async getSelfTransactions(
     @GqlJwtPayload() jwtPayloadDto: JwtPayloadDto,
+    @Args(FieldName.INPUT, filterInputFieldOptions)
+    filterInput: FilterInputType,
   ): Promise<Array<typeof TransactionResult>> {
-    const { id } = jwtPayloadDto;
-
-    const [err, res] = await this.transactionService.getTransactions({
-      user: id,
-    });
+    const [err, res] = await this.transactionService.getSelfTransactions(
+      filterInput,
+      jwtPayloadDto,
+    );
 
     if (err) {
       return [getError(err)];

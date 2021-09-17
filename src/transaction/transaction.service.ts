@@ -10,6 +10,8 @@ import { UpdateTransactionDto } from './dtos/update/update-transaction.dto';
 import { AuthorizedUpdateTransactionDto } from './dtos/update/authorized-update-transaction.dto';
 import { TransactionRepository } from './transaction.repository';
 import { CryptoCurrencyRepository } from 'src/crypto-currency/crypto-currency.repository';
+import { FilterDto } from 'src/shared/dtos/filter.dto';
+import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
 
 @Injectable()
 export class TransactionService {
@@ -30,7 +32,7 @@ export class TransactionService {
   }
 
   public async getTransactions(
-    filter = {},
+    filter: FilterDto,
   ): Promise<[BaseError, TransactionDto[]]> {
     const res = await this.transactionRepository.getEntities(filter);
 
@@ -146,6 +148,20 @@ export class TransactionService {
     const res = await this.transactionRepository.getOneEntity(
       getSelfTransactionByIdDto,
     );
+
+    return res;
+  }
+
+  public async getSelfTransactions(
+    filter: FilterDto,
+    jwtPayloadDto: JwtPayloadDto,
+  ): Promise<[BaseError, TransactionDto[]]> {
+    const { id } = jwtPayloadDto;
+
+    const res = await this.getTransactions({
+      ...filter,
+      where: { user: id },
+    });
 
     return res;
   }
