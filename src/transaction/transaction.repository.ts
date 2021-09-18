@@ -49,7 +49,7 @@ export class TransactionRepository {
     filter: FilterDto,
   ): Promise<[BaseError, TransactionDto[]]> {
     try {
-      const query = this.userModel.find().sort({ date: -1 });
+      const query = this.userModel.find().sort({ date: -1, coinPrice: -1 });
 
       const res = await buildFilterQuery(query, filter);
 
