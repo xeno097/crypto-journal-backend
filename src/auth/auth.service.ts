@@ -25,9 +25,6 @@ export class AuthService {
     private readonly firebaseAdminService: FirebaseAdminService,
   ) {}
 
-  // TODO: store refresh token in db
-
-  // TODO: remove used refresh token from db
   public async signIn(
     signInDto: SignInDto,
   ): Promise<[BaseError, AuthPayloadDto]> {
@@ -48,8 +45,6 @@ export class AuthService {
     // if the user does not exist create it
     if (!user) {
       [err, user] = await this.userRepository.createEntity(createUserDto);
-
-      // TODO: send email to new users
     }
 
     if (err) {
@@ -77,7 +72,6 @@ export class AuthService {
     return res;
   }
 
-  // TODO: improve security of refresh token method as it can be improved in cases like the refresh token has been stolen
   public async refreshToken(
     refreshTokenDto: RefreshTokenDto,
   ): Promise<[BaseError, AuthPayloadDto]> {
@@ -109,32 +103,28 @@ export class AuthService {
   }
 
   private generateAuthPayload(user: UserDto): [BaseError, AuthPayloadDto] {
-    try {
-      const { id, email, role, blocked } = user;
+    const { id, email, role, blocked } = user;
 
-      if (blocked) {
-        throw new BlockedUserError();
-      }
-
-      const jwtPayloadDto: JwtPayloadDto = { id, role, email };
-
-      const accessToken = this.jwtService.sign(jwtPayloadDto);
-      const refreshToken = this.jwtService.sign(jwtPayloadDto, {
-        secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
-        expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
-      });
-
-      // return access token, refresh token and user data
-      const authPayloadDto: AuthPayloadDto = {
-        accessToken,
-        refreshToken,
-        user,
-      };
-
-      return [null, authPayloadDto];
-    } catch (error) {
-      return [error, null];
+    if (blocked) {
+      return [new BlockedUserError(), null];
     }
+
+    const jwtPayloadDto: JwtPayloadDto = { id, role, email };
+
+    const accessToken = this.jwtService.sign(jwtPayloadDto);
+    const refreshToken = this.jwtService.sign(jwtPayloadDto, {
+      secret: this.configService.get(EnvKey.REFRESH_TOKEN_SECRET),
+      expiresIn: this.configService.get(EnvKey.REFRESH_TOKEN_EXP),
+    });
+
+    // return access token, refresh token and user data
+    const authPayloadDto: AuthPayloadDto = {
+      accessToken,
+      refreshToken,
+      user,
+    };
+
+    return [null, authPayloadDto];
   }
 
   public async updateLoggedUser(
