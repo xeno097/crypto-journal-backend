@@ -12,6 +12,7 @@ import { TransactionRepository } from './transaction.repository';
 import { CryptoCurrencyRepository } from 'src/crypto-currency/crypto-currency.repository';
 import { FilterDto } from 'src/shared/dtos/filter.dto';
 import { JwtPayloadDto } from 'src/auth/dtos/jwt-payload.dto';
+import { UpdateTransactionPayloadDto } from './dtos/update/update-transaction-payload.dto';
 
 @Injectable()
 export class TransactionService {
@@ -87,34 +88,63 @@ export class TransactionService {
     const { getOneEntityDto, updateEntityPayload } = operationDto;
     const { id } = getOneEntityDto;
 
-    const { operation } = updateEntityPayload;
+    const { operation, cryptoCurrency } = updateEntityPayload;
 
     const getSelfTransactionByIdDto: GetSelfEntityByIdDto = {
       id,
       user,
     };
 
-    const updateTransactionDto: UpdateTransactionDto = {
-      getOneEntityDto: getSelfTransactionByIdDto,
-      updateEntityPayload: {
-        ...updateEntityPayload,
-      },
+    let updateTransactionPayloadDto: UpdateTransactionPayloadDto = {
+      ...updateEntityPayload,
     };
 
     if (operation) {
-      return await this._updateTransactionWithOperation(
-        updateTransactionDto,
+      const [
+        err,
+        updateWithOperation,
+      ] = await this._updateTransactionWithOperation(
+        updateTransactionPayloadDto,
         operation,
       );
+
+      if (err) {
+        return [err, null];
+      }
+
+      updateTransactionPayloadDto = { ...updateWithOperation };
     }
+
+    if (cryptoCurrency) {
+      const [
+        err,
+        updateWithCrypto,
+      ] = await this._getUpdateTransactionPayloadWithCryptoCurrency(
+        updateEntityPayload,
+        cryptoCurrency,
+      );
+
+      if (err) {
+        return [err, null];
+      }
+
+      updateTransactionPayloadDto = { ...updateWithCrypto };
+    }
+
+    const updateTransactionDto: UpdateTransactionDto = {
+      getOneEntityDto: getSelfTransactionByIdDto,
+      updateEntityPayload: {
+        ...updateTransactionPayloadDto,
+      },
+    };
 
     return await this.transactionRepository.updateEntity(updateTransactionDto);
   }
 
   private async _updateTransactionWithOperation(
-    updateTransactionDto: UpdateTransactionDto,
+    updateTransactionPayloadDto: UpdateTransactionPayloadDto,
     operation: string,
-  ): Promise<[BaseError, TransactionDto]> {
+  ): Promise<[BaseError, UpdateTransactionPayloadDto]> {
     const [err, op] = await this.operationRepository.getOneEntity({
       id: operation,
     });
@@ -124,22 +154,37 @@ export class TransactionService {
     }
 
     const { type } = op;
-    const { getOneEntityDto, updateEntityPayload } = updateTransactionDto;
 
-    const updateTransactionWithOperationDto: UpdateTransactionDto = {
-      getOneEntityDto,
-      updateEntityPayload: {
-        ...updateEntityPayload,
-        operation,
-        operationType: type,
-      },
+    const updateTransactionWithOperationDto: UpdateTransactionPayloadDto = {
+      ...updateTransactionPayloadDto,
+      operation,
+      operationType: type,
     };
 
-    const res = await this.transactionRepository.updateEntity(
-      updateTransactionWithOperationDto,
-    );
+    return [null, updateTransactionWithOperationDto];
+  }
 
-    return res;
+  private async _getUpdateTransactionPayloadWithCryptoCurrency(
+    updateTransactionPayloadDto: UpdateTransactionPayloadDto,
+    cryptoCurrency: string,
+  ): Promise<[BaseError, UpdateTransactionPayloadDto]> {
+    const [err, currency] = await this.cryptoCurrencyRepository.getOneEntity({
+      symbol: cryptoCurrency,
+    });
+
+    if (err) {
+      return [err, null];
+    }
+
+    const { id, symbol } = currency;
+
+    const updateTransactionWithOperationDto: UpdateTransactionPayloadDto = {
+      ...updateTransactionPayloadDto,
+      coinSymbol: symbol,
+      cryptoCurrency: id,
+    };
+
+    return [null, updateTransactionWithOperationDto];
   }
 
   public async getSelfTransactionById(
