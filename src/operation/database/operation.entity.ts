@@ -1,16 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
 import { OperationDto } from '../dtos/operation.dto';
 import { OperationType } from '../enums/operation-type.enum';
-import { IOperationEntity } from '../interfaces/entitities/operation-entity.interface';
+import { IOperationDto } from '../interfaces/dtos/operation-dto.interface';
 
 @Schema({
   collection: 'operation',
   timestamps: true,
 })
-export class OperationEntity extends Document
-  implements IOperationEntity, IBaseEntity {
+export class OperationEntity extends Document implements IOperationDto {
   @Prop({ required: true })
   id: string;
 

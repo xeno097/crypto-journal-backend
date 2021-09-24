@@ -8,7 +8,7 @@ export const HoldingResult = createUnionType({
   name: HoldingResultName,
   types: () => [HoldingType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 

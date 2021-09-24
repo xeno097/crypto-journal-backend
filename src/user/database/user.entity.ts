@@ -1,15 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { UserRoles } from 'src/shared/enums/user-roles.enum';
-import { IBaseEntity } from 'src/shared/interfaces/base-entity.interface';
 import { UserDto } from '../dtos/user.dto';
-import { IUserEntity } from '../interfaces/entities/user-entity.interface';
+import { IUserDto } from '../interfaces/dtos/user-dto.interface';
 
 @Schema({
   collection: 'user',
   timestamps: true,
 })
-export class UserEntity extends Document implements IUserEntity, IBaseEntity {
+export class UserEntity extends Document implements IUserDto {
   @Prop({ required: true })
   id: string;
 

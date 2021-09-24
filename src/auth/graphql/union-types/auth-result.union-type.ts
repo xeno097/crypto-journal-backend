@@ -8,7 +8,7 @@ export const AuthResult = createUnionType({
   name: AuthResultTypeName,
   types: () => [AuthPayloadType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 

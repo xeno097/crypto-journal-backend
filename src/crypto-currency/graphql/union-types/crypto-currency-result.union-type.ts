@@ -8,7 +8,7 @@ export const CryptoCurrencyResult = createUnionType({
   name: CryptoCurrencyResultName,
   types: () => [CryptoCurrencyType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 

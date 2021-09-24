@@ -16,7 +16,6 @@ import { idFieldOptions } from '../shared/graphql/options/id-input-field.options
 @AuthorizedRoles(UserRoles.ADMIN)
 @UseGuards(GqlAuthGuard)
 export class UserResolver {
-  // TODO: create a formatter for mongoose validation errors
   constructor(private readonly userService: UserService) {}
 
   @Query(() => UserResult)

@@ -13,4 +13,16 @@ export class ApiError implements IBaseError {
 
   @Field(() => [ErrorDetail])
   errors: ErrorDetail[] = [];
+
+  constructor(err?: {
+    code?: ErrorCode;
+    errors?: ErrorDetail[];
+    message?: string;
+  }) {
+    const { code, errors, message } = err;
+
+    this.code = code ?? this.code;
+    this.errors = errors ?? this.errors;
+    this.message = message ?? this.message;
+  }
 }

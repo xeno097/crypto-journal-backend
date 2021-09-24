@@ -8,7 +8,7 @@ export const UserResult = createUnionType({
   name: UserResultName,
   types: () => [UserType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 
