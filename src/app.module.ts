@@ -6,7 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { CoinApiModule } from './coin-api/coin-api.module';
 import { CommonJwtModule } from './common-jwt/common-jwt.module';
 import { CryptoCurrencyModule } from './crypto-currency/crypto-currency.module';
-import { EmailModule } from './email/email.module';
 import { HoldingModule } from './holding/holding.module';
 import { OperationModule } from './operation/operation.module';
 import { EnvKey } from './shared/enums/env-keys.enum';
@@ -38,7 +37,6 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       context: formatExpressGraphqlCtx,
     }),
-    EmailModule,
     AuthModule,
     CommonJwtModule,
     OperationModule,

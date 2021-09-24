@@ -8,7 +8,7 @@ export const BalanceResult = createUnionType({
   name: BalanceResultName,
   types: () => [BalanceType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 

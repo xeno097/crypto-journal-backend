@@ -1,10 +1,11 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { IUserType } from 'src/user/interfaces/object-types/user-object-type.interface';
+import { UserRoles } from 'src/shared/enums/user-roles.enum';
+import { IUserDto } from 'src/user/interfaces/dtos/user-dto.interface';
 
 export const UserTypeName = 'User';
 
 @ObjectType(UserTypeName)
-export class UserType implements IUserType {
+export class UserType implements IUserDto {
   @Field(() => ID)
   id: string;
 
@@ -16,4 +17,8 @@ export class UserType implements IUserType {
 
   @Field()
   email: string;
+
+  role: UserRoles;
+
+  blocked: boolean;
 }

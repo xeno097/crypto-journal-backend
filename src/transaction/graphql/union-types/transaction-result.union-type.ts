@@ -8,7 +8,7 @@ export const TransactionResult = createUnionType({
   name: TransactionResultName,
   types: () => [TransactionType, ApiError],
   resolveType: value => {
-    if (value.code) {
+    if (value instanceof ApiError) {
       return ApiError;
     }
 

@@ -1,11 +1,11 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { OperationType as OperationTypeEnum } from 'src/operation/enums/operation-type.enum';
-import { IOperationType } from 'src/operation/interfaces/object-types/operation-object-type.interface';
+import { IOperationDto } from 'src/operation/interfaces/dtos/operation-dto.interface';
 
 export const operationTypeName = 'Operation';
 
 @ObjectType(operationTypeName)
-export class OperationType implements IOperationType {
+export class OperationType implements IOperationDto {
   @Field(() => ID)
   id: string;
 
